@@ -6,17 +6,14 @@ public class CameraController : MonoBehaviour
     [Header("PLAYER INPUTS")]
     [SerializeField] private InputActionAsset _inputActions;
     private InputAction _lookAction;
+    private InputAction _escAction;
     
     [Header("CINEMACHINE")]
     public GameObject CameraRoot;
     private float _cameraSensitivity;
-
     public float RotationSpeed;
-    private Vector3 _cameraPosition;
     public float TopClamp;
     public float BottomClamp;
-    private GameObject _mainCamera;
-    private Vector3 _lookAmt;
     public float CrounchingOffset;
     
     
@@ -27,9 +24,8 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         _playerController = GetComponent<PlayerController>();
-        _cameraPosition = CameraRoot.transform.position;
         _lookAction = InputSystem.actions.FindAction("Look");
-        //Cursor.lockState = CursorLockMode.Locked;
+        _escAction = InputSystem.actions.FindAction("Esc");
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
     }
@@ -38,11 +34,12 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         CameraRotation();
+        ChangeCursorState();
     }
 
     public void AdjustCameraRoot()
     {
-        if(_playerController.Crouching || _playerController.Sliding)
+        if(_playerController.Crouching)
         {
             CameraRoot.transform.position  =  CameraRoot.transform.position - Vector3.down * CrounchingOffset;
         }
@@ -54,26 +51,60 @@ public class CameraController : MonoBehaviour
 
     private void CameraRotation()
     {
-        Vector2 lookValue = _lookAction.ReadValue<Vector2>();
-        _cameraSensitivity += lookValue.y * RotationSpeed;
-        _cameraRotation = lookValue.x * RotationSpeed;
+        if(Cursor.lockState != CursorLockMode.None)
+        {
+            Vector2 lookValue = _lookAction.ReadValue<Vector2>();
+            _cameraSensitivity += lookValue.y * RotationSpeed;
+            float cameraX = lookValue.x * RotationSpeed;
+            _cameraRotation = lookValue.x * RotationSpeed;
+            //float bodyRotation = lookValue.x * RotationSpeed *2f;
 
-        _cameraSensitivity = Mathf.Clamp(_cameraSensitivity, BottomClamp, TopClamp);
+            _cameraSensitivity = Mathf.Clamp(_cameraSensitivity, BottomClamp, TopClamp);
 
-        CameraRoot.transform.localRotation = Quaternion.Euler(_cameraSensitivity,0.0f, 0.0f);
+            /*
+            Funciona perfecte pero el jugador es moura mentre fa el slide.
+            CameraRoot.transform.localRotation = Quaternion.Euler(_cameraSensitivity,0.0f,0.0f);
+            transform.Rotate(Vector3.up * _cameraRotation);
 
-        transform.Rotate(Vector3.up * _cameraRotation);
+            La camera és mou sola. Pero el cos no, llavors he de trobar una manera que es relacioni. 
+            CameraRoot.transform.localRotation = Quaternion.Euler(_cameraSensitivity,_cameraRotation,0.0f);
+            
+
+            */
+
+            //Allows the camera to rotate.
+            CameraRoot.transform.localRotation = Quaternion.Euler(_cameraSensitivity,0.0f,0.0f);
+            if(!_playerController.Sliding)
+            {
+                //Makes the whole player body rotate, including the camera.
+
+                transform.Rotate(Vector3.up * _cameraRotation);
+                //transform.Rotate(Vector3.up * cameraX);
+                //transform.rotation = Quaternion.Euler(0.0f,_cameraRotation * 1.0f,0.0f);
+            }
+   
+
+            //Debug.Log($"CAMERA ROTATION: {CameraRoot.transform.localRotation}  || PLAYER ROTATIOn: {transform.rotation}");
+            
+        }
     }
 
-    /*private float ClampAngle(float angle, float minAngle, float maxAngle)
+    private void ChangeCursorState()
     {
-        if(angle < -360f)
+        if(_escAction.WasPressedThisFrame())
         {
-            angle += 360f;
+            if(Cursor.lockState == CursorLockMode.Confined)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            } 
+            else
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = false;
+            }
+                
         }
-        else if(angle > 360f)
-        {
-            angle -= 360f;
-        }
-    }*/
+    }
+
 }

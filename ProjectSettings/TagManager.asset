@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - explosionJump
+  - Enemy
   layers:
   - Default
   - TransparentFX

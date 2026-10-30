@@ -1,3 +1,5 @@
+using System.Collections;
+//using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,9 +17,12 @@ public class PlayerController : MonoBehaviour
     [Header("PLAYER STATS")]
     public float MoveSpeed;
     public float SprintSpeed;
-    public bool Crouching = false;
-    public bool Sliding  = false;
     public float SlideSpeed;
+    public float SpeedChange;
+    public bool Crouching = false;
+    public float CrouchingHeigth;
+    public bool Sliding  = false;
+    public float SlideDamping;
     public float JumpHeight;
     public float Gravity;
 
@@ -33,11 +38,11 @@ public class PlayerController : MonoBehaviour
     private float _speed;
     private float _bufferTimer;
     private float _verticalVelocity;
+    private float _slideVelocity;
+    private Vector3 _slideDirection;
     private float _coyoteTimer;
     private float _fallTimer;
-    private float _slideTimer;
-    private Vector3 lookDirection;
-
+ 
     [Header("GROUND CHECK")]
     public bool Grounded = true;
     public float GroundedOffset = -0.1f;
@@ -73,16 +78,19 @@ public class PlayerController : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _cameraController = GetComponent<CameraController>();
-        _slideTimer = SlideTime;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(Sliding);
+        //Debug.Log($"CURRENT VELOCITY {_controller.velocity}");
+        
         Move();
         Jump();
         GroundCheck();
-        CrouchAndSlide();
+        Slide();
+        //Debug.Log(_slideVelocity);
     }
 
     //Tells us if the player is touching the ground or not.
@@ -90,20 +98,17 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 groundCheckPos = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
         Grounded = Physics.CheckSphere(groundCheckPos, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
-        //_controller.isGrounded 
     }
 
 
     //Escollir velocitat segons input, girar, check sprint input...
     void Move()
     {
-
         // _contoler.Move() expects a Vector 3 value.
         // We need to provide a Vector3 and use our speed to multiply it by Time.deltaTime.
 
         if(_sprintAction.IsPressed())
         {
-            Debug.Log("SPRINTING");
             _speed = SprintSpeed;
         }
         else
@@ -111,52 +116,22 @@ public class PlayerController : MonoBehaviour
             _speed = MoveSpeed;
         }
         
-
-        //TODO: Implementar slide, legir una direcció, només linia recta.
-
         Vector2 inputValue = _moveAction.ReadValue<Vector2>();
         Vector3 move = new Vector3(inputValue.x, 0.0f, inputValue.y).normalized;
 
-        //float currentSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
-        //float speedOffset = 0.1f;
-        //float SpeedChangeRate = 10.0f;
 
         move = Vector3.ClampMagnitude(move,1f);
-
-        /*if(currentSpeed < _speed - speedOffset || currentSpeed > _speed + speedOffset)
-        {
-            _speed = Mathf.Lerp(currentSpeed, _speed, Time.deltaTime * SpeedChangeRate);
-            _speed = Mathf.Round(_speed * 1000f) / 1000f;
-        }
-        else
-        {
-               if(_sprintAction.IsPressed())
-        {
-            Debug.Log("SPRINTING");
-            _speed = SprintSpeed;
-        }
-        else
-        {
-            _speed = MoveSpeed;
-            if(_sprintAction.IsPressed())
-            {
-                
-                _speed = SprintSpeed;
-            }
-            else
-            {
-                _speed = MoveSpeed;
-            }
-        }   
-        */
-
         if(move != Vector3.zero)
         {
-           move = transform.right * inputValue.x + transform.forward * inputValue.y;
+            move = transform.right * inputValue.x + transform.forward * inputValue.y;
         }
-
-        //move += Vector3.up * _verticalVelocity;
-        _controller.Move( move *_speed * Time.deltaTime);
+        
+        if(!Sliding)
+        {
+            _controller.Move( move *_speed * Time.deltaTime);
+        }  
+       
+        Crouch(move.magnitude);
     }
 
     void Jump()
@@ -176,50 +151,65 @@ public class PlayerController : MonoBehaviour
 
         if(_coyoteTimer > 0f && _jumpAction.WasPressedThisFrame())
         {
-            Debug.Log("Jump");
-           _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            Sliding = false;
+            //The Unity Documentation provides this formular in order to calculate the player jump.
+           _verticalVelocity = Mathf.Sqrt(JumpHeight * -3f * Gravity);
            
         }
-        Debug.Log(_verticalVelocity);
-        _verticalVelocity += Gravity * Time.deltaTime;
+
+        _verticalVelocity += Gravity *1.5f * Time.deltaTime;
         _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f)* Time.deltaTime);
     }
 
-    void CrouchAndSlide()
+    void Crouch(float currentspeed)
     {
+        
         if(Grounded && _crouchAction.WasPressedThisFrame())
         {
             Crouching = true;
             _cameraController.AdjustCameraRoot();
-            if(_speed > MoveSpeed)
+            _controller.height = CrouchingHeigth;
+            Debug.Log(currentspeed);
+            //No agafa bé la velocitat.
+            //Ns que cony fer la veritat, he de trobar un amanera de detecar b'e la velocitat - moviemnt
+            //Poder millor ficar-ho dins del move pq puc agafar el move de referencia.
+            //float currentSpeed =  _controller.velocity.magnitude;
+            //Debug.Log($"PLAYER VELOCITY (Crouch): {_controller.velocity.magnitude}");
+            if(currentspeed > 0.0f)
             {
-                Slide();
+                Debug.Log("Start Slide");
+                _slideDirection = transform.forward;
+                _slideVelocity = _speed * 1.5f;
+                Sliding = true;
             }
+
         }
         else if(Grounded && _crouchAction.WasReleasedThisFrame())
         {
             Crouching = false;
+            _controller.height = 2.0f;
             _cameraController.AdjustCameraRoot();
+            Sliding = false;
         }  
-    }
+    }  
 
     private void Slide()
     {
-        _speed = SlideSpeed;
-        _slideTimer -= Time.deltaTime;
-        if(_slideTimer < 0.0f)
+        if(Sliding && Grounded)
         {
-            Debug.Log("Stop Sliding");
-            _speed = MoveSpeed;
-        }
+            _slideVelocity -= _speed *1.5f * Time.deltaTime;
+            _controller.Move(_slideDirection * _slideVelocity * Time.deltaTime);
 
+            Debug.Log(_speed);
+
+            if(_slideVelocity <= _speed * 0.7f)
+            {
+                Sliding = false;
+                Debug.Log("STOP SLIDING");
+            }
+
+        }       
     }
-
-   /* private IEnumerator Slide()
-    {
-        
-    }*/
-
 
     void OnDrawGizmosSelected()
     {
