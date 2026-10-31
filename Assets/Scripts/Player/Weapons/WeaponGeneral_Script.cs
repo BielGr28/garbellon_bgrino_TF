@@ -9,7 +9,7 @@ using UnityEngine;
 }*/
 public class WeaponGeneral_Script : MonoBehaviour
 {
-    public  int Damgage = 5;
+    public  float Damage = 5.0f;
     private float CritChance = .05f;
     public  int MagazineAmmo= 20;
     private int CurrentAmmo = 20;
@@ -47,10 +47,10 @@ public class WeaponGeneral_Script : MonoBehaviour
         throw new System.NotImplementedException();
     }   
 
-    public  void Especial() 
+    /*public  void Especial() 
     {
         throw new System.NotImplementedException();
-    }
+    }*/
 
     public  void Reload()
     {
@@ -74,7 +74,6 @@ public class WeaponGeneral_Script : MonoBehaviour
 
             if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0.0f)),out hit, 100.0f))
             {
-                Debug.Log("HOLAAAA");
                 SetLineRendererComponents(_shootingPS.GetComponent<LineRenderer>(),PSPoint,hit.point);
                 GameObject bulletTrail;
                 bulletTrail = GameObject.Instantiate(_shootingPS,PSPoint.position,Quaternion.identity);
@@ -83,14 +82,14 @@ public class WeaponGeneral_Script : MonoBehaviour
 
                 if(hit.collider.CompareTag("Enemy"))
                 {
-                    Debug.Log("Enemy Hitted");
+                    //hit.collider.GetComponent<Enemy_Health>().EnemyDamaged(Damage);
                 }
             }
 
             CurrentAmmo -= 1;
             UpdateAmmoUI(CurrentAmmo);
             IEnumerator coroutine = ShootingDelay(FireRate);
-            StartCoroutine("ShootingDelay");
+            StartCoroutine(coroutine);
         }
         else
         {

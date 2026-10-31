@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private InputAction _sprintAction;
     private InputAction _jumpAction;
     private InputAction _crouchAction;
-    private Vector3 _movementAmt;
+    //private Vector3 _movementAmt;
 
     [Header("PLAYER STATS")]
     public float MoveSpeed;

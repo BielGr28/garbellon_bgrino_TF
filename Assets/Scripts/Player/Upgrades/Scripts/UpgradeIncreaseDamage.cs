@@ -3,13 +3,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Upgrade", menuName = "Upgrade/Increase Damage")]
 public class UpgradeIncreaseDamage : Upgrades
 {
-    public override void EspecialPlayerEffect(PlayerController playerController)
-    {
-        throw new System.NotImplementedException();
-    }
+
+    public float DamageIncrease = 1.10f;
+    public override void EspecialPlayerEffect(PlayerController playerController){}
 
     public override void EspecialWeaponEffect(WeaponGeneral_Script upgradeWeapon)
     {
-        throw new System.NotImplementedException();
+        upgradeWeapon.Damage = upgradeWeapon.Damage * DamageIncrease;
+        Debug.Log(upgradeWeapon.Damage);
     }
 }

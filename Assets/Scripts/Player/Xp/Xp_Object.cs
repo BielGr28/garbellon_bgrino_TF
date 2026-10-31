@@ -23,5 +23,10 @@ public class Xp_Object : MonoBehaviour
             Debug.Log("XP GAIN");
             collision.gameObject.GetComponent<PlayerXP_Script>().GainXP(XPToGive);
         }
+        else
+        {
+            Debug.Log("CANT GAIN XP");
+        }
+
     }
 }

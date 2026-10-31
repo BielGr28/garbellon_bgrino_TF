@@ -34,7 +34,11 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         CameraRotation();
-        ChangeCursorState();
+
+        if(_escAction.WasPressedThisFrame())
+        {
+            ChangeCursorState();
+        }
     }
 
     public void AdjustCameraRoot()
@@ -89,21 +93,18 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    private void ChangeCursorState()
+    public void ChangeCursorState()
     {
-        if(_escAction.WasPressedThisFrame())
+
+        if(Cursor.lockState == CursorLockMode.Confined)
         {
-            if(Cursor.lockState == CursorLockMode.Confined)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            } 
-            else
-            {
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = false;
-            }
-                
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        } 
+        else
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
         }
     }
 

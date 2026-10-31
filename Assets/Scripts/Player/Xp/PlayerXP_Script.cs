@@ -1,3 +1,6 @@
+using Microsoft.Unity.VisualStudio.Editor;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
@@ -5,27 +8,40 @@ public class PlayerXP_Script : MonoBehaviour
 {
 
     [Header("PLAYER XP")]
-    public float CurrentXP = 0.0f;
-    public float XPToLvlUp = 100.0f;
+    [SerializeField] AnimationCurve experienceCurve;
+    public float XPMultiplier;
+    public float CurrentXP;
+
+    public float XPToLvlUp;
+
+    public int currentLevel = 0;
 
 
     [Header("PLAYER COMPONENTS")]
-    private PlayerController _playerController;
-    private WeaponController _weaponController;
 
+    [SerializeField] UpgradesManager _upgradesManager;
+
+    [Header("XP INTERFACE")]
+    [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] TextMeshProUGUI experienceText;
+
+    [SerializeField] Image experienceFill;
+ 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _playerController = this.GetComponent<PlayerController>();
-        _weaponController = this.GetComponentInChildren<WeaponController>();
+
+        //XPCurve();
+        GainXP(100.0f);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log($"CURRENT XP: {CurrentXP} // XP TO LvL UP: {XPToLvlUp}");
+        //Debug.Log($"CURRENT XP: {CurrentXP} // XP TO LvL UP: {XPToLvlUp}");
+       
     }
 
     public void GainXP(float xpToGet)
@@ -40,8 +56,28 @@ public class PlayerXP_Script : MonoBehaviour
 
     private void LevelUp()
     {
-        //Calculate xp level curve.
-        XPToLvlUp = XPToLvlUp * 1.2f;
+        currentLevel++;
+
+        XPToLvlUp *= XPMultiplier;
+        _upgradesManager.ShowUpgradesUI();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        Time.timeScale = 0.0f;
+    }
+
+    void XPCurve()
+    {
+        for (var i = 0; i <= 10; i++)
+        {
+            Debug.Log($"{XPToLvlUp} || {i}");
+            XPToLvlUp *= XPMultiplier;
+        }
+    }
+
+    void UpdateInterface()
+    {
         
     }
 
