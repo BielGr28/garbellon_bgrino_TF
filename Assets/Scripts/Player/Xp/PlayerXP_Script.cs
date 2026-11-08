@@ -20,6 +20,7 @@ public class PlayerXP_Script : MonoBehaviour
     [Header("PLAYER COMPONENTS")]
 
     [SerializeField] UpgradesManager _upgradesManager;
+    [SerializeField] WeaponController _weaponController;
 
     [Header("XP INTERFACE")]
     [SerializeField] TextMeshProUGUI levelText;
@@ -64,6 +65,7 @@ public class PlayerXP_Script : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
+        _weaponController.canShoot = false;
         Time.timeScale = 0.0f;
     }
 

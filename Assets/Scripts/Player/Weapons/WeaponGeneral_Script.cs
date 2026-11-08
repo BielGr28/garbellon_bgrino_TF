@@ -10,13 +10,13 @@ using UnityEngine;
 public class WeaponGeneral_Script : MonoBehaviour
 {
     public  float Damage = 5.0f;
-    private float CritChance = .05f;
+    //private float CritChance = .05f;
     public  int MagazineAmmo= 20;
     private int CurrentAmmo = 20;
     public  float ReloadSpeed = 1.0f;
     public  float Precision = 10f;
 
-    public  float FireRate = .7f;
+    public  float FireRate = .6f;
 
     public  string Type = "Single";
 
@@ -29,6 +29,7 @@ public class WeaponGeneral_Script : MonoBehaviour
     [SerializeField] private AudioClip _shootClip;
 
     [SerializeField] private GameObject _shootingPS;
+    [SerializeField] private GameObject _impactPS;
 
     public Transform PSPoint;
 
@@ -56,10 +57,10 @@ public class WeaponGeneral_Script : MonoBehaviour
     {
        //_audioSource.clip = _reloadClip;
        //_audioSource.Play();
-       CurrentAmmo = MagazineAmmo;
-       UpdateAmmoUI(CurrentAmmo);
-       IEnumerator coroutine = ShootingDelay(ReloadSpeed);
-       StartCoroutine("ShootingDelay");
+       //CurrentAmmo = MagazineAmmo;
+       //UpdateAmmoUI(CurrentAmmo);
+       IEnumerator coroutine = ReloadingDelay(ReloadSpeed);
+       StartCoroutine(coroutine);
        
     }
 
@@ -74,11 +75,15 @@ public class WeaponGeneral_Script : MonoBehaviour
 
             if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0.0f)),out hit, 100.0f))
             {
+
                 SetLineRendererComponents(_shootingPS.GetComponent<LineRenderer>(),PSPoint,hit.point);
                 GameObject bulletTrail;
                 bulletTrail = GameObject.Instantiate(_shootingPS,PSPoint.position,Quaternion.identity);
                 GameObject.Destroy(bulletTrail,0.2f);
                 
+                GameObject bulletImpact;
+                bulletImpact = GameObject.Instantiate(_impactPS,hit.point + hit.normal * 0.01f, Quaternion.FromToRotation(Vector3.forward,-hit.normal));
+                GameObject.Destroy(bulletImpact,0.15f);
 
                 if(hit.collider.CompareTag("Enemy"))
                 {
@@ -100,9 +105,20 @@ public class WeaponGeneral_Script : MonoBehaviour
 
     public IEnumerator ShootingDelay(float delay)
     {
-       GetComponentInParent<WeaponController>().canShoot = false;
+       _weaponController.canShoot = false;
        yield return new WaitForSeconds(delay);
-       GetComponentInParent<WeaponController>().canShoot = true;
+       _weaponController.canShoot = true;
+    }
+
+    public IEnumerator ReloadingDelay(float delay)
+    {
+       _weaponController.canShoot = false;
+       _weaponController.canReload = false;
+       yield return new WaitForSeconds(delay);
+        CurrentAmmo = MagazineAmmo;
+        UpdateAmmoUI(CurrentAmmo);
+       _weaponController.canShoot = true;
+       _weaponController.canReload = true;
     }
 
     private void UpdateAmmoUI(int currentAmmoUI)

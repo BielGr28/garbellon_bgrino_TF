@@ -131,7 +131,8 @@ public class PlayerController : MonoBehaviour
             _controller.Move( move *_speed * Time.deltaTime);
         }  
        
-        Crouch(move.magnitude);
+        Crouch(move);
+        //Crouch(move.magnitude);
     }
 
     void Jump()
@@ -152,7 +153,7 @@ public class PlayerController : MonoBehaviour
         if(_coyoteTimer > 0f && _jumpAction.WasPressedThisFrame())
         {
             Sliding = false;
-            //The Unity Documentation provides this formular in order to calculate the player jump.
+            //The Unity Documentation provides this formular in order to calculate the player jump. -- 
            _verticalVelocity = Mathf.Sqrt(JumpHeight * -3f * Gravity);
            
         }
@@ -161,24 +162,24 @@ public class PlayerController : MonoBehaviour
         _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f)* Time.deltaTime);
     }
 
-    void Crouch(float currentspeed)
+    void Crouch(Vector3 movementVector) //(float currentSpeed)
     {
-        
+        float currentSpeed = movementVector.magnitude;
         if(Grounded && _crouchAction.WasPressedThisFrame())
         {
             Crouching = true;
             _cameraController.AdjustCameraRoot();
             _controller.height = CrouchingHeigth;
-            Debug.Log(currentspeed);
+            Debug.Log(currentSpeed);
             //No agafa bé la velocitat.
             //Ns que cony fer la veritat, he de trobar un amanera de detecar b'e la velocitat - moviemnt
             //Poder millor ficar-ho dins del move pq puc agafar el move de referencia.
             //float currentSpeed =  _controller.velocity.magnitude;
             //Debug.Log($"PLAYER VELOCITY (Crouch): {_controller.velocity.magnitude}");
-            if(currentspeed > 0.0f)
+            if(currentSpeed > 0.0f)
             {
                 Debug.Log("Start Slide");
-                _slideDirection = transform.forward;
+                _slideDirection = movementVector; //_slideDirection = tranform.forward;
                 _slideVelocity = _speed * 1.5f;
                 Sliding = true;
             }

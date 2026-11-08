@@ -20,6 +20,7 @@ public  abstract class Upgrades : ScriptableObject
 
     public UpgradeType upgradeType;
 
+    public int unlockLevel = 0;
 
     public  abstract void EspecialWeaponEffect(WeaponGeneral_Script upgradeWeapon);
 

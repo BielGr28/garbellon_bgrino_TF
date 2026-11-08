@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class WeaponController : MonoBehaviour
 
     public bool isShooting;
     public bool canShoot;
+    public bool canReload;
 
     public GameObject[] WeaponsList;
     public GameObject CurrentWeapon;
@@ -29,18 +31,21 @@ public class WeaponController : MonoBehaviour
         _shootAction = InputSystem.actions.FindAction("Shoot");
         _specialAction = InputSystem.actions.FindAction("Special");
         _reloadAction = InputSystem.actions.FindAction("Reload"); 
+
+        //canShoot = true;
+        //canReload = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(_shootAction.WasPressedThisFrame())
+        if(_shootAction.WasPressedThisFrame() && canShoot)
         {
             CurrentWeapon.GetComponent<WeaponGeneral_Script>().Shoot();
             Debug.Log("SHOOOT");//CurrentWeapon.
         }
 
-        if(_reloadAction.WasPerformedThisFrame())
+        if(_reloadAction.WasPerformedThisFrame() && canReload)
         {
             CurrentWeapon.GetComponent<WeaponGeneral_Script>().Reload();
             Debug.Log("RELOAAAD");
