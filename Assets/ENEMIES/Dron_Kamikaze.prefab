@@ -209,7 +209,7 @@ MonoBehaviour:
   viewAngle: 180
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1024
   effects:
   - {fileID: 9040842186640271754, guid: 93c3d7c4f8ef94341a168eb5d02e9331, type: 3}
   - {fileID: 2611510148992489175, guid: 63a0f895662e6ab4fb65c53c68920c62, type: 3}
