@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,13 +7,14 @@ public abstract class EnemyLogic : MonoBehaviour
     [Header("References")]
     protected Transform player;
     protected CapsuleCollider playerCollider;
-    protected NavMeshAgent agent;
-    protected Enemy_Stats stats;
+    [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected Enemy_Stats stats;
     protected Animator animator;
+    public AudioSource audioSource;
+    public GameObject mesh;
     [Header ("Detection")]
     public float viewAngle = 120f;
     public LayerMask obstacleLayer;
-    
     [Header("Visuals")]
     public ParticleSystem[] effects;
     
@@ -28,14 +30,10 @@ public abstract class EnemyLogic : MonoBehaviour
         
         stats = GetComponent<Enemy_Stats>();
         animator = GetComponentInChildren<Animator>();
-
+        audioSource = GetComponentInChildren<AudioSource>();
         agent = GetComponent<NavMeshAgent>();
-        if(agent != null)
-        {
-            agent.updateRotation = false;
-            agent.speed = stats.speed; //sets agent speed to current enemy speed
-        }
     }
+    
     
     private void Update()
     {

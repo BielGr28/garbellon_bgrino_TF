@@ -9,6 +9,9 @@ public class Enemy_Health : MonoBehaviour
     [Header("Drops")]
     [SerializeField] private GameObject xpOrb;
     [SerializeField] private GameObject coin;
+    [Header("Audio")]
+    [SerializeField] private AudioClip audioExplosion;
+
 
     void Awake()
     {
@@ -24,7 +27,7 @@ public class Enemy_Health : MonoBehaviour
 
     public void EnemyDamaged(int damage)
     {
-        if (stats.currentHealth > 0) //DAMAGED//
+        if (stats.currentHealth > 0) //DAMAGED
         {
             Debug.Log($"{gameObject.name} recibió {damage} de daño");
             stats.currentHealth -= damage;
@@ -41,12 +44,26 @@ public class Enemy_Health : MonoBehaviour
         if(stats.currentHealth <= 0)
         {
             Loot();
-            Debug.Log("Enemy Dead");
 
+            //VFX
             ParticleSystem particle = Instantiate(enemy.effects[0], transform.position, Quaternion.identity);
-            particle.Play(); particle.name = "im gona explode!"; particle.transform.SetParent(GameObject.Find("bin").transform);
+            particle.Play(); particle.transform.localScale *= 1.4f;
+            particle.transform.SetParent(GameObject.Find("bin").transform);
 
-            Destroy(gameObject);
+            //SFX
+            enemy.audioSource.PlayOneShot(audioExplosion);
+
+            //Drestroy
+            enemy.mesh.SetActive(false);
+            foreach (var component in gameObject.GetComponentsInChildren<Behaviour>())
+            {
+                if(component != gameObject.GetComponentInChildren<AudioSource>())
+                {
+                    component.enabled = false;
+                }
+            }
+
+            Destroy(gameObject, audioExplosion.length);
             Destroy(particle.gameObject, 2f);
         }
     }

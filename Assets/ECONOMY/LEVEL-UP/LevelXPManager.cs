@@ -32,12 +32,10 @@ public class LevelXPManager : MonoBehaviour
         {
             resourceManager.AddXP(3);
         }
-        Debug.Log("TotalXP: "+resourceManager.TotalRunXP());
     }
 
     void LevelUp()
     {
-        Debug.Log("A");
         if(resourceManager.TotalRunXP() >= xpToLevelUp)
         {
             currentLevel++; //Lvl increase

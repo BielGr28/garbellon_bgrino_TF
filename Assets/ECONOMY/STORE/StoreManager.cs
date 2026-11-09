@@ -48,8 +48,6 @@ public class StoreManager : MonoBehaviour
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-        ///playerController.enabled = false;
         GameObject.Find("Player_Test").GetComponent<PlayerController>().enabled = false;
     }
 
@@ -66,8 +64,6 @@ public class StoreManager : MonoBehaviour
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        ///playerController.enabled = false;
         GameObject.Find("Player_Test").GetComponent<PlayerController>().enabled = true;
 
     }

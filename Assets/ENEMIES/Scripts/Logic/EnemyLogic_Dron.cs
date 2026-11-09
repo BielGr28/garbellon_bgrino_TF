@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -6,24 +7,41 @@ public class EnemyLogic_Dron : EnemyLogic
 {
     public enum DroneChargeState
     { Warning, Charging, Stunned }
-    [SerializeField]private DroneChargeState chargeState;
+    private DroneChargeState chargeState;
 
     [Header ("Dron Settings")]
     [SerializeField] private int maxCharges = 3; //Charges needed for dron to self-destruct
     [SerializeField] private int currentCharges; 
-    private Vector3 chargeTargetPosition;
-    private Vector3 chargeDirection;
+    private Vector3 chargeTargetPosition, chargeDirection;
     private float stateTimer = 3f; //based on warningDuration
     [SerializeField] private float warningDuration = 3f; //based on animation
     [SerializeField] private float stunDuration = 2f; //based on animation 
     [SerializeField] private float hoverOffset; //dron flying offset relative to player
-    
+    [Header("Materials")]
+    [SerializeField] private MeshRenderer dronRender;
+    private Material eyeMat, reactorMat;
+    [Header("Audio")]
+    [SerializeField] private AudioClip audioExplosion;
+    [SerializeField] private AudioClip audioCharge;
+
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        //Set instances for modifiying local mat
+        Material[] mats = dronRender.materials;
+        eyeMat = mats[4];
+        reactorMat = mats[5];
+    }
 
     #region States Logic
     public override void IdleLogic() //What does while waiting
     {
-        animator.SetBool("isIdle", true);
-        //cambiar material effecte desactivat 
+        //Makes effect of dron disabled
+        eyeMat.SetColor("_EmissionColor", Color.black);
+        reactorMat.SetColor("_EmissionColor", Color.black);
     }
 
     public override void ChaseLogic() //What does when enemy detected
@@ -52,25 +70,50 @@ public class EnemyLogic_Dron : EnemyLogic
     public override void OnEnterChase()
     {
         currentCharges = 0;
+        eyeMat.SetColor("_EmissionColor", Color.red);
+        reactorMat.SetColor("_EmissionColor", Color.red);
         ChangeChargeState(DroneChargeState.Warning);
     }
+    
     public override bool CanTransitToAttack() { return false; }
 #endregion States Logic
 
 
 #region ChaseLogic
+    private void ChangeChargeState(DroneChargeState newState)
+    {
+        chargeState = newState;
+
+        switch(chargeState)
+        {
+            case DroneChargeState.Warning:
+                stateTimer = warningDuration; 
+                animator.SetTrigger("Warning");
+                audioSource.PlayOneShot(audioCharge);
+                break;
+
+            case DroneChargeState.Charging:
+                animator.SetTrigger("Charging");
+                break;
+
+            case DroneChargeState.Stunned:
+                stateTimer = stunDuration;
+                animator.SetTrigger("Recovering");
+                break;
+        }
+    }
+
     private void WarningState()
     {
         HoverAbovePlayer();
         FacePlayer();
 
         stateTimer -= Time.deltaTime;
-        if(stateTimer <= 0f)
+        if(stateTimer <= 0f) //WARNING TIME
         {
             Vector3 playerCenter = playerCollider.bounds.center;
             
             chargeTargetPosition = playerCenter; // Gets player position
-
             chargeDirection = (chargeTargetPosition - transform.position).normalized; // Calculates charge target position on exact charge start 
 
             ChangeChargeState(DroneChargeState.Charging);
@@ -79,7 +122,6 @@ public class EnemyLogic_Dron : EnemyLogic
 
     private void ChargingState()
     {        
-        //transform.position += stats.speed * Time.deltaTime * chargeDirection; //Moves to target position
         transform.position = Vector3.MoveTowards(transform.position, chargeTargetPosition, stats.speed * Time.deltaTime);
 
         FaceDirection(chargeDirection); //looks towards target
@@ -116,30 +158,6 @@ public class EnemyLogic_Dron : EnemyLogic
         }
     }
 
-    private void ChangeChargeState(DroneChargeState newState)
-    {
-        chargeState = newState;
-
-        switch(chargeState)
-        {
-            case DroneChargeState.Warning:
-                stateTimer = warningDuration;
-                //animator.SetBool("isIdle", false);
-                animator.SetTrigger("Warning");
-                // [ADD] ¡audio source to alarm player of enemy charge!
-                break;
-
-            case DroneChargeState.Charging:
-                animator.SetTrigger("Charging");
-                break;
-
-            case DroneChargeState.Stunned:
-                stateTimer = stunDuration;
-                animator.SetTrigger("Recovering");
-                break;
-        }
-    }
-
     private void HoverAbovePlayer() //Moves dron back to flying position
     {
         Vector3 targetPos = playerCollider.bounds.center + Vector3.up * hoverOffset;
@@ -156,14 +174,14 @@ public class EnemyLogic_Dron : EnemyLogic
 
 
 #region AttackLogic
-    private void Explode()
+    public void Explode()
     {
         Debug.Log("BOOM");
 
         Collider[] hits = Physics.OverlapSphere(transform.position, stats.attackRange); 
         foreach(Collider hit in hits)
         {
-            Debug.Log("PLAYER HITTED!");
+            //Debug.Log("Player Hitted!");
             //PlayerHealth playerHealth = hit.GetComponent<PlayerHealth>();
 
             //if(playerHealth != null)
@@ -172,12 +190,25 @@ public class EnemyLogic_Dron : EnemyLogic
             //}
         }
 
-        //Instantiates explosion, plays it addapting scalen when dron attacks 
+        //VFX
         ParticleSystem particle = Instantiate(effects[0], transform.position, Quaternion.identity);
-        particle.Play(); particle.transform.localScale *= 1.4f;
-        particle.name = "exploding!"; particle.transform.SetParent(GameObject.Find("bin").transform);
+        particle.Play(); particle.transform.localScale *= 1.3f;
+        particle.transform.SetParent(GameObject.Find("bin").transform);
 
-        Destroy(gameObject);
+        //SFX
+        audioSource.PlayOneShot(audioExplosion);
+
+        //Destroy
+        mesh.SetActive(false);
+        foreach (var component in gameObject.GetComponentsInChildren<Behaviour>())
+        {
+            if(component != gameObject.GetComponentInChildren<AudioSource>())
+            {
+                component.enabled = false;
+            }
+        }
+
+        Destroy(gameObject, audioExplosion.length);
         Destroy(particle.gameObject, 2f);
     }
 

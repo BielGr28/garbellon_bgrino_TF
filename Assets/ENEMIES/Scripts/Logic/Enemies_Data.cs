@@ -18,9 +18,9 @@ public class Enemy_Data : MonoBehaviour
             { 
                 maxHealth = 200, 
                 damage = 10, 
-                speed = 3f,
-                detectionRange = 0,
-                attackRange = 0,
+                speed = 3,
+                detectionRange = 12,
+                attackRange = 8,
                 XP = 6,
                 Coins = 2
             }
@@ -32,9 +32,9 @@ public class Enemy_Data : MonoBehaviour
             { 
                 maxHealth = 300, 
                 damage = 15, 
-                speed = 2f, 
-                detectionRange = 0,
-                attackRange = 0,
+                speed = 2, 
+                detectionRange = 12,
+                attackRange = 3,
                 XP = 10,
                 Coins = 3
             }
@@ -46,7 +46,7 @@ public class Enemy_Data : MonoBehaviour
             { 
                 maxHealth = 100, 
                 damage = 20, 
-                speed = 15f,
+                speed = 15,
                 detectionRange = 12,
                 attackRange = 4,  
                 XP = 4,

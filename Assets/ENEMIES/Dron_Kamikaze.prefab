@@ -32,7 +32,7 @@ Transform:
   - {fileID: 6547516256477400427}
   - {fileID: 2305189127684796086}
   m_Father: {fileID: 8260348346373952507}
-  m_LocalEulerAnglesHint: {x: 89.98021, y: 0.00003232972, z: 0}
+  m_LocalEulerAnglesHint: {x: 89.88413, y: 137.17688, z: 137.17686}
 --- !u!1 &1823595630492475325
 GameObject:
   m_ObjectHideFlags: 0
@@ -64,7 +64,7 @@ Transform:
   m_Children:
   - {fileID: 722287904284459501}
   m_Father: {fileID: 2124044924217886944}
-  m_LocalEulerAnglesHint: {x: -89.98021, y: -0.000005008957, z: 0}
+  m_LocalEulerAnglesHint: {x: -89.9762, y: 165.58994, z: 0}
 --- !u!1 &1935391738226046115
 GameObject:
   m_ObjectHideFlags: 0
@@ -121,12 +121,12 @@ GameObject:
   - component: {fileID: 1038706071041615966}
   - component: {fileID: 4012088077957113717}
   - component: {fileID: 5282286378874411734}
-  - component: {fileID: 6314966820437445715}
   - component: {fileID: 5648125262463199280}
   - component: {fileID: 130402908507108223}
+  - component: {fileID: 6314966820437445715}
   m_Layer: 0
   m_Name: Dron_Kamikaze
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -141,7 +141,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.49, y: 2, z: 7.93}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5521473666240024683}
@@ -181,19 +181,6 @@ MonoBehaviour:
   attackRange: 0
   XP: 0
   Coins: 0
---- !u!114 &6314966820437445715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2589658674650036126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32ce8fc6d494ab84c912e0fe51c94ba6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StateManager
-  currentState: {fileID: 8014097989183647818}
 --- !u!114 &5648125262463199280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,6 +193,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b56df85c53ac94c97a28a21dfffd26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyLogic_Dron
+  audioSource: {fileID: 6587374746378880920}
+  mesh: {fileID: 3339015902844636533}
   viewAngle: 180
   obstacleLayer:
     serializedVersion: 2
@@ -213,12 +202,14 @@ MonoBehaviour:
   effects:
   - {fileID: 9040842186640271754, guid: 93c3d7c4f8ef94341a168eb5d02e9331, type: 3}
   - {fileID: 2611510148992489175, guid: 63a0f895662e6ab4fb65c53c68920c62, type: 3}
-  chargeState: 0
   maxCharges: 3
   currentCharges: 0
   warningDuration: 3
   stunDuration: 2
   hoverOffset: 3.75
+  dronRender: {fileID: 7310137187635032982}
+  audioExplosion: {fileID: 8300000, guid: 461f6f8cef9dca244b086abfe0f5bccb, type: 3}
+  audioCharge: {fileID: 8300000, guid: 6614d2a73cc693a47b562a256f31fc4c, type: 3}
 --- !u!114 &130402908507108223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +224,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health
   xpOrb: {fileID: 7351489221007661102, guid: 0715b952f5a83fd409402e54f6516f22, type: 3}
   coin: {fileID: 6295949140571229052, guid: 9301a5a0f63f0bc4ab8740b887ac056f, type: 3}
+  audioExplosion: {fileID: 8300000, guid: 461f6f8cef9dca244b086abfe0f5bccb, type: 3}
+--- !u!114 &6314966820437445715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2589658674650036126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32ce8fc6d494ab84c912e0fe51c94ba6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StateManager
+  currentState: {fileID: 8014097989183647818}
 --- !u!1 &3339015902844636533
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +269,7 @@ Transform:
   m_Children:
   - {fileID: 8260348346373952507}
   m_Father: {fileID: 5521473666240024683}
-  m_LocalEulerAnglesHint: {x: -0.0000025075537, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.0000017909639, y: 0, z: 0}
 --- !u!1 &3987042558201963887
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +302,7 @@ Transform:
   - {fileID: 6057266920071542874}
   - {fileID: 2124044924217886944}
   m_Father: {fileID: 5189402860442530379}
-  m_LocalEulerAnglesHint: {x: 89.98021, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 89.98022, y: 0, z: 0}
 --- !u!1 &4298801187700031640
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +405,7 @@ GameObject:
   - component: {fileID: 5521473666240024683}
   - component: {fileID: 8801560053230607072}
   - component: {fileID: 1675733541239080461}
+  - component: {fileID: 6587374746378880920}
   m_Layer: 0
   m_Name: Dron_mat_anim
   m_TagString: Untagged
@@ -468,6 +474,103 @@ CapsuleCollider:
   m_Height: 3.0703335
   m_Direction: 2
   m_Center: {x: 0.00026106834, y: -0.1227662, z: -0.0485906}
+--- !u!82 &6587374746378880920
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4639656169237051488}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4785929284496402183
 GameObject:
   m_ObjectHideFlags: 0
