@@ -8,6 +8,9 @@ public class EnemyLogic_Tank : EnemyLogic
     private float cooldownTimer;
     [SerializeField] private Collider attackCollider;
     private bool canDealDamage;
+    [Header("Materials")]
+    [SerializeField] private SkinnedMeshRenderer tancRender;
+    private Material reactorMat,energyMat;
 
 
     protected override void Awake()
@@ -16,18 +19,29 @@ public class EnemyLogic_Tank : EnemyLogic
 
         canDealDamage = false;
         attackCollider.enabled = false;
+
+        //Set instances for modifiying local mat
+        Material[] mats = tancRender.materials;
+        reactorMat = mats[1];
+        energyMat = mats[2];
     }
 
 #region States
     public override void IdleLogic()
     {
         agent.ResetPath();
+
+        //Makes effect of dron disabled
+        energyMat.SetColor("_EmissionColor", Color.black);
+        reactorMat.SetColor("_EmissionColor", Color.black);
     }
     public override void ChaseLogic()
     {
         FacePlayer();
-
         agent.SetDestination(player.position);
+
+        //Anim
+        animator.SetTrigger("isWalking");
     }
     public override void AttackLogic()
     {
@@ -45,13 +59,12 @@ public class EnemyLogic_Tank : EnemyLogic
     public override void OnEnterChase()
     {
         cooldownTimer = 0f;
-        //agent.updateRotation = false;
+        agent.updateRotation = false;
         agent.speed = stats.speed; //sets agent speed to current enemy speed
+        energyMat.SetColor("_EmissionColor", Color.yellow);
+        reactorMat.SetColor("_EmissionColor", Color.green);
     }
-    public override bool CanTransitToAttack()
-    {
-        return base.CanTransitToAttack();
-    }
+    public override bool CanTransitToAttack() { return base.CanTransitToAttack(); }
 #endregion States
 
 #region AttackLogic
@@ -61,7 +74,7 @@ public class EnemyLogic_Tank : EnemyLogic
         EnableAttackCollider();
 
         //Animation
-        //animator.SetTrigger("Attack");
+        animator.SetTrigger("isAttacking");
     }
 
     public void OnAttackHit(Collider other)
@@ -72,7 +85,6 @@ public class EnemyLogic_Tank : EnemyLogic
             //PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
             //playerHealth?.TakeDamage(owner.Damage);
         }
-
         DisableAttackCollider();
     }
 

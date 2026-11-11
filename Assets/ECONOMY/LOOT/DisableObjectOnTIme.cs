@@ -3,7 +3,6 @@ using UnityEngine;
 public class DisableObjectOnTIme : MonoBehaviour
 {
     [SerializeField] private float timeBeforeDisapear;
-
     
     void FixedUpdate()
     {
@@ -11,7 +10,7 @@ public class DisableObjectOnTIme : MonoBehaviour
         timeBeforeDisapear -= Time.deltaTime;
         if (timeBeforeDisapear <= 0)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

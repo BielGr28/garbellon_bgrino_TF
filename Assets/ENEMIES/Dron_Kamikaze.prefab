@@ -140,7 +140,7 @@ Transform:
   m_GameObject: {fileID: 2589658674650036126}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.49, y: 2, z: 7.93}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -193,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52b56df85c53ac94c97a28a21dfffd26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyLogic_Dron
+  animator: {fileID: 8801560053230607072}
   audioSource: {fileID: 6587374746378880920}
   mesh: {fileID: 3339015902844636533}
   viewAngle: 180
@@ -222,8 +223,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac0353022212b1499b6bd8eb9593a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health
-  xpOrb: {fileID: 7351489221007661102, guid: 0715b952f5a83fd409402e54f6516f22, type: 3}
-  coin: {fileID: 6295949140571229052, guid: 9301a5a0f63f0bc4ab8740b887ac056f, type: 3}
+  prefabXPOrb: {fileID: 7351489221007661102, guid: 0715b952f5a83fd409402e54f6516f22, type: 3}
+  prefabCoin: {fileID: 6295949140571229052, guid: 9301a5a0f63f0bc4ab8740b887ac056f, type: 3}
   audioExplosion: {fileID: 8300000, guid: 461f6f8cef9dca244b086abfe0f5bccb, type: 3}
 --- !u!114 &6314966820437445715
 MonoBehaviour:
@@ -404,7 +405,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5521473666240024683}
   - component: {fileID: 8801560053230607072}
-  - component: {fileID: 1675733541239080461}
   - component: {fileID: 6587374746378880920}
   m_Layer: 0
   m_Name: Dron_mat_anim
@@ -423,7 +423,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.47, y: 0.47, z: 0.47}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5189402860442530379}
@@ -451,29 +451,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!136 &1675733541239080461
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4639656169237051488}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.4920255
-  m_Height: 3.0703335
-  m_Direction: 2
-  m_Center: {x: 0.00026106834, y: -0.1227662, z: -0.0485906}
 --- !u!82 &6587374746378880920
 AudioSource:
   m_ObjectHideFlags: 0
@@ -707,6 +684,7 @@ GameObject:
   - component: {fileID: 6057266920071542874}
   - component: {fileID: 7556922337144455251}
   - component: {fileID: 7310137187635032982}
+  - component: {fileID: 1121408272327481965}
   m_Layer: 0
   m_Name: dron_base
   m_TagString: Untagged
@@ -792,6 +770,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1121408272327481965
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579588389483505564}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6504948327120448401, guid: 866655582bf6c24489ab7c0e6b0d7e21, type: 3}
 --- !u!1 &7088255111915780335
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,6 +803,7 @@ GameObject:
   - component: {fileID: 6547516256477400427}
   - component: {fileID: 4788734693136832821}
   - component: {fileID: 6193700038025636766}
+  - component: {fileID: 3927257748552766556}
   m_Layer: 0
   m_Name: dron_propulsor
   m_TagString: Untagged
@@ -883,3 +884,25 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3927257748552766556
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7088255111915780335}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 113718146233648925, guid: 866655582bf6c24489ab7c0e6b0d7e21, type: 3}

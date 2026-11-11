@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum EnemyType
 {
-    Basic,
+    Ranged,
     Tank,
     Dron,
 }
@@ -13,12 +13,12 @@ public class Enemy_Data : MonoBehaviour
     public static readonly Dictionary<EnemyType, EnemyStatsData> Database = new()
     {
         {
-            EnemyType.Basic,
+            EnemyType.Ranged,
             new EnemyStatsData 
             { 
                 maxHealth = 200, 
                 damage = 10, 
-                speed = 3,
+                speed = 5,
                 detectionRange = 12,
                 attackRange = 8,
                 XP = 6,
@@ -32,9 +32,9 @@ public class Enemy_Data : MonoBehaviour
             { 
                 maxHealth = 300, 
                 damage = 15, 
-                speed = 2, 
+                speed = 3, 
                 detectionRange = 12,
-                attackRange = 3,
+                attackRange = 2.5f,
                 XP = 10,
                 Coins = 3
             }

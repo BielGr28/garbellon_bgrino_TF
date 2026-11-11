@@ -30,13 +30,7 @@ public class PLAYER_TEST_SHOOT : MonoBehaviour
         if(Physics.Raycast(ray, out RaycastHit hit, attackRange))
         {
             Enemy_Health enemyHealth = hit.collider.GetComponentInParent<Enemy_Health>();
-
-            if(enemyHealth != null)
-            {
-                enemyHealth.EnemyDamaged(damage);
-
-                Debug.Log("Impacto en enemigo");
-            }
+            enemyHealth?.EnemyDamaged(damage, hit);
         }
     }
 

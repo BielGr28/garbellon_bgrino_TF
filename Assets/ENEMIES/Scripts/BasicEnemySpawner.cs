@@ -5,6 +5,7 @@ public class BasicEnemySpawner : MonoBehaviour
     [SerializeField] private GameObject enemySpawnerBin;
     [SerializeField] private GameObject dronPrefab;
     [SerializeField] private float spawnCooldown;
+    [SerializeField] private Transform spawnPoint;
     private float maxSpawnCooldown;
 
 
@@ -26,7 +27,7 @@ public class BasicEnemySpawner : MonoBehaviour
 
     void Spawner()
     {
-        GameObject prefab = Instantiate(dronPrefab, transform.position, Quaternion.identity);
+        GameObject prefab = Instantiate(dronPrefab, spawnPoint.position, Quaternion.identity);
         prefab.transform.SetParent(enemySpawnerBin.transform);
         spawnCooldown = maxSpawnCooldown;
     }

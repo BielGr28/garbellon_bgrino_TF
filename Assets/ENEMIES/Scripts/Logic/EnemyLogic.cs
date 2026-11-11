@@ -7,9 +7,9 @@ public abstract class EnemyLogic : MonoBehaviour
     [Header("References")]
     protected Transform player;
     protected CapsuleCollider playerCollider;
-    [SerializeField] protected NavMeshAgent agent;
-    [SerializeField] protected Enemy_Stats stats;
-    protected Animator animator;
+    protected NavMeshAgent agent;
+    protected Enemy_Stats stats;
+    public Animator animator;
     public AudioSource audioSource;
     public GameObject mesh;
     [Header ("Detection")]
