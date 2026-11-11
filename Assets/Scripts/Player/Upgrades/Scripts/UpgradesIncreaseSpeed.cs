@@ -4,6 +4,12 @@ using UnityEngine;
 public class UpgradesIncreaseSpeed : Upgrades
 {
     [SerializeField] private float SpeedIncrease = 1.15f;
+
+    public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void EspecialPlayerEffect(PlayerController playerController)
     {
         playerController.MoveSpeed *= SpeedIncrease;
@@ -12,7 +18,7 @@ public class UpgradesIncreaseSpeed : Upgrades
          Debug.Log(playerController.MoveSpeed + " / " + playerController.SprintSpeed);
     }
 
-    public override void EspecialWeaponEffect(WeaponGeneral_Script upgradeWeapon)
+    public override void EspecialWeaponEffect(Weapon upgradeWeapon)
     {
         throw new System.NotImplementedException();
     }

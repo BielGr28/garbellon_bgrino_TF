@@ -134,6 +134,5 @@ public class WeaponGeneral_Script : MonoBehaviour
 
         lineRenderer.SetPosition(0,startPos.position);
         lineRenderer.SetPosition(1,endPos);
-        
     }
 }

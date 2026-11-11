@@ -6,14 +6,21 @@ public class UpgradesIncreaseFireRate : Upgrades
 {
 
     [SerializeField] private float FRIncrease = 0.1f;
+
+    public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void EspecialPlayerEffect(PlayerController playerController)
     {
         throw new System.NotImplementedException();
     }
 
-    public override void EspecialWeaponEffect(WeaponGeneral_Script upgradeWeapon)
+    public override void EspecialWeaponEffect(Weapon weapon)
     {
-       upgradeWeapon.FireRate -= FRIncrease;
-       Debug.Log(upgradeWeapon.FireRate);
+        weapon.FireRate -= FRIncrease;
+        Debug.Log(weapon.FireRate);
+        //throw new System.NotImplementedException();
     }
 }

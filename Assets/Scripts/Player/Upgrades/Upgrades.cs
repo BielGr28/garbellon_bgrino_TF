@@ -22,9 +22,9 @@ public  abstract class Upgrades : ScriptableObject
 
     public int unlockLevel = 0;
 
-    public  abstract void EspecialWeaponEffect(WeaponGeneral_Script upgradeWeapon);
+    public  abstract void EspecialWeaponEffect(Weapon upgradeWeapon);
 
-
+    public abstract void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades);
     public abstract void EspecialPlayerEffect(PlayerController playerController);
 
 }

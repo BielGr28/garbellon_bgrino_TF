@@ -35,19 +35,23 @@ public class UpgradesManager : MonoBehaviour
         switch(choosenUpgrade.upgradeType)
         {
             case UpgradeType.Damage:
-                choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
             break;
 
             case UpgradeType.Ammo:
-                choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
             break;
 
             case UpgradeType.FireRate:
-                choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
             break;
 
             case UpgradeType.Precision:
-                choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
+                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
             break;
 
             case UpgradeType.Jump:

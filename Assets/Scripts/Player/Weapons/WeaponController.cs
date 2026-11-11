@@ -1,6 +1,4 @@
-using System.Linq.Expressions;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,8 +15,12 @@ public class WeaponController : MonoBehaviour
     public bool canShoot;
     public bool canReload;
 
-    public GameObject[] WeaponsList;
+    public Weapon weapon;
+    public WeaponsGeneralUpgrades generalUpgrades;
+
+    public GameObject[] WeaponsList = new GameObject[2];
     public GameObject CurrentWeapon;
+    public GameObject SecondWeapon;
 
     [Header("WEAPONS UI")]
     public TextMeshProUGUI _gunAmmo; 
@@ -31,31 +33,57 @@ public class WeaponController : MonoBehaviour
         _shootAction = InputSystem.actions.FindAction("Shoot");
         _specialAction = InputSystem.actions.FindAction("Special");
         _reloadAction = InputSystem.actions.FindAction("Reload"); 
+        _switchAction = InputSystem.actions.FindAction("Switch");
 
-        //canShoot = true;
-        //canReload = true;
+        CurrentWeapon = WeaponsList[0];
+        SecondWeapon = WeaponsList[1];
+        CurrentWeapon.SetActive(true);
+        weapon = CurrentWeapon.GetComponentInChildren<Weapon>();
+        generalUpgrades = GetComponentInParent<WeaponsGeneralUpgrades>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(_shootAction.WasPressedThisFrame() && canShoot)
+        if(weapon.WeaponType == WeaponType.Single)
         {
-            CurrentWeapon.GetComponent<WeaponGeneral_Script>().Shoot();
-            Debug.Log("SHOOOT");//CurrentWeapon.
+            if(_shootAction.WasPressedThisFrame() && canShoot)
+            {
+                weapon.Shoot();   
+            }
+        }
+        else
+        {
+            if(_shootAction.IsPressed() && canShoot)
+            {
+                weapon.Shoot();   
+            }
+        }
+        
+        if(_reloadAction.WasPressedThisFrame() && canReload)
+        {
+            weapon.Reload();
         }
 
-        if(_reloadAction.WasPerformedThisFrame() && canReload)
+        if(_specialAction.WasPressedThisFrame())
         {
-            CurrentWeapon.GetComponent<WeaponGeneral_Script>().Reload();
-            Debug.Log("RELOAAAD");
+           weapon.Especial();
+        }
+
+        if(_switchAction.WasPressedThisFrame())
+        {
+            ChangeWeapons(CurrentWeapon,SecondWeapon);
         }
     }
+
 
     void ChangeWeapons(GameObject current, GameObject newWeapon)
     {
         current.SetActive(false);
         newWeapon.SetActive(true);
+        WeaponsList[1] = current;
+        WeaponsList[0] = newWeapon;
+        weapon = newWeapon.GetComponentInChildren<Weapon>();
     }
 
 

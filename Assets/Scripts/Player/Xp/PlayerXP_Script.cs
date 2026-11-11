@@ -1,6 +1,4 @@
-using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
@@ -26,7 +24,7 @@ public class PlayerXP_Script : MonoBehaviour
     [SerializeField] TextMeshProUGUI levelText;
     [SerializeField] TextMeshProUGUI experienceText;
 
-    [SerializeField] Image experienceFill;
+    //[SerializeField] Image experienceFill;
  
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,7 +32,7 @@ public class PlayerXP_Script : MonoBehaviour
     {
 
         //XPCurve();
-        GainXP(100.0f);
+        //GainXP(100.0f);
 
     }
 
