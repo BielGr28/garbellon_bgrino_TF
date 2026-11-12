@@ -223,8 +223,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac0353022212b1499b6bd8eb9593a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Health
-  prefabXPOrb: {fileID: 7351489221007661102, guid: 0715b952f5a83fd409402e54f6516f22, type: 3}
-  prefabCoin: {fileID: 6295949140571229052, guid: 9301a5a0f63f0bc4ab8740b887ac056f, type: 3}
+  prefabs:
+  - {fileID: 7351489221007661102, guid: 0715b952f5a83fd409402e54f6516f22, type: 3}
+  - {fileID: 6295949140571229052, guid: 9301a5a0f63f0bc4ab8740b887ac056f, type: 3}
+  rareDropChance: 10
+  rareDrops:
+  - prefab: {fileID: 4025880286624998259, guid: 7b929d90857b2ec42930331aebc83392, type: 3}
+    dropWeight: 40
+  - prefab: {fileID: 588625127742230284, guid: 8d8e5a2f76ee32f46b9934115e881249, type: 3}
+    dropWeight: 60
   audioExplosion: {fileID: 8300000, guid: 461f6f8cef9dca244b086abfe0f5bccb, type: 3}
 --- !u!114 &6314966820437445715
 MonoBehaviour:

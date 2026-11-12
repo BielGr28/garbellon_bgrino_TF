@@ -163,9 +163,10 @@ GameObject:
   - component: {fileID: 2034927139662404835}
   - component: {fileID: 3814152527017319531}
   - component: {fileID: 3229286007109664254}
+  - component: {fileID: 5027165439893958164}
   - component: {fileID: 7625650477243999426}
-  - component: {fileID: 2894711663064911364}
   - component: {fileID: -7601992584717726098}
+  - component: {fileID: 2894711663064911364}
   m_Layer: 0
   m_Name: coin
   m_TagString: Untagged
@@ -265,10 +266,37 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 1
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!54 &5027165439893958164
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6295949140571229052}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &7625650477243999426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,20 +310,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceType
   currentResource: 1
-  resourceValue: 0
---- !u!114 &2894711663064911364
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6295949140571229052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ce0f22581150e64586ad0e6d3c230e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DisableObjectOnTIme
-  timeBeforeDisapear: 10
 --- !u!114 &-7601992584717726098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,3 +324,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DropLootLogic
   jumpHeight: 3
   dropDuration: 1.5
+  detectionRange: 0
+  followSpeed: 0
+--- !u!114 &2894711663064911364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6295949140571229052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce0f22581150e64586ad0e6d3c230e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisableObjectOnTIme
+  timeBeforeDisapear: 10

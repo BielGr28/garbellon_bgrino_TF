@@ -163,9 +163,10 @@ GameObject:
   - component: {fileID: 3105268820693584879}
   - component: {fileID: 4540512311261485843}
   - component: {fileID: 1871562890387785387}
+  - component: {fileID: 6290085304630809234}
   - component: {fileID: 6046408809465685008}
-  - component: {fileID: 2963726532281107019}
   - component: {fileID: -1795758610467754517}
+  - component: {fileID: 2963726532281107019}
   m_Layer: 0
   m_Name: xpOrb
   m_TagString: Untagged
@@ -265,8 +266,35 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &6290085304630809234
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351489221007661102}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &6046408809465685008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,20 +308,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceType
   currentResource: 0
-  resourceValue: 0
---- !u!114 &2963726532281107019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7351489221007661102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ce0f22581150e64586ad0e6d3c230e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DisableObjectOnTIme
-  timeBeforeDisapear: 15
 --- !u!114 &-1795758610467754517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,3 +322,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DropLootLogic
   jumpHeight: 3
   dropDuration: 1.5
+  detectionRange: 4
+  followSpeed: 8
+--- !u!114 &2963726532281107019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351489221007661102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ce0f22581150e64586ad0e6d3c230e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisableObjectOnTIme
+  timeBeforeDisapear: 15

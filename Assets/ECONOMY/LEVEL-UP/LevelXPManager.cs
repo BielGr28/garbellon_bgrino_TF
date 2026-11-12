@@ -8,7 +8,6 @@ public class LevelXPManager : MonoBehaviour
 {
     [Header("Level Refs.")]
     [SerializeField] private int currentLevel = 1;
-    //public int currentExp -> ResourceManager (playerXP) 
     [SerializeField] private int xpToLevelUp = 10; //Saves the amount of xp needed to lvl-up
     [SerializeField] float xpLvlMultiplier = 1.2f;
     [Header ("Components")]

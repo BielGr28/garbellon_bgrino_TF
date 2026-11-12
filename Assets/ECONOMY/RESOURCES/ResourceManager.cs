@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -8,12 +9,14 @@ public class ResourceManager : MonoBehaviour
 {
     private int playerXP; //saves player run xp amount
     private int playerCoins; //saves player run coins amount.
+    [Header("Text Display")]
+    [SerializeField] private TextMeshProUGUI[] resourceFlowPrefab; //XP-Coin
 
 
 #region TEST
     void Awake()
     {
-        Debug.Log("add coin test key: 'K'");
+        Debug.Log("add 1 coin test key: 'K'");
     }
     void Update()
     {
@@ -34,6 +37,7 @@ public class ResourceManager : MonoBehaviour
         playerCoins += amount;
     }
 
+
     public int TotalRunXP() //Returns total XP value from current run
     {
         return playerXP;
@@ -42,6 +46,7 @@ public class ResourceManager : MonoBehaviour
     {
         return playerCoins;
     }
+
 
     public void ResetXP(int amount) //Decreases xp total (can be used in lvl-up)
     {
@@ -53,5 +58,16 @@ public class ResourceManager : MonoBehaviour
     }
     
 
-
+    public void XpFlowDisplayer(int income) //Displays xp gained by player in text
+    {
+        TextMeshProUGUI incomeDisplay1 = Instantiate(resourceFlowPrefab[0]);
+        incomeDisplay1.transform.SetParent(GameObject.Find("FlowXPSlot").transform, false);
+        incomeDisplay1.text = "+" + income.ToString();
+    }
+    public void CoinFlowDisplayer(int income) //Displays coins gained by player in text
+    {
+        TextMeshProUGUI incomeDisplay1 = Instantiate(resourceFlowPrefab[1]);
+        incomeDisplay1.transform.SetParent(GameObject.Find("FlowCoinSlot").transform, false);
+        incomeDisplay1.text = "+" + income.ToString();
+    }
 }

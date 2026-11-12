@@ -1,4 +1,5 @@
 using System.Collections;
+using Mono.Cecil;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyLogic))]
@@ -8,8 +9,10 @@ public class Enemy_Health : MonoBehaviour
     private EnemyLogic enemy;
 
     [Header("Drops")]
-    [SerializeField] private GameObject prefabXPOrb;
-    [SerializeField] private GameObject prefabCoin;
+    [SerializeField] private GameObject[] prefabs; //0-xp > 1-coin
+    [Header("Rare Drops")]
+    [SerializeField] [Range(0f,100f)] private float rareDropChance;
+    [SerializeField] private RareDropData[] rareDrops;
     [Header("Audio")]
     [SerializeField] private AudioClip audioExplosion;
     [Header("Animation")]
@@ -75,6 +78,7 @@ public class Enemy_Health : MonoBehaviour
     {
         //Drops
             Loot();
+            RareDrops();
         
         //Disable
             foreach (var component in gameObject.GetComponentsInChildren<Behaviour>())
@@ -138,31 +142,7 @@ public class Enemy_Health : MonoBehaviour
 #endregion Animation Data
 
 
-#region Drops
-    private void Loot()
-    {
-        //xpOrb.GetComponent<DisableObjectOnTIme>().enabled=true; 
-        //coin.GetComponent<DisableObjectOnTIme>().enabled=true; 
-
-        Vector3 landingPosXP = GetLootLandingPosition() + new Vector3(Random.Range(-0.75f, 0.75f),0,Random.Range(-0.75f,0.75f));
-        Vector3 landingPosCoin = GetLootLandingPosition() + new Vector3(Random.Range(-0.75f, 0.75f),0,Random.Range(-0.75f,0.75f));
-
-        //foreach per escalar-lo
-        GameObject xp = Instantiate(prefabXPOrb, transform.position, Quaternion.identity);
-        GameObject coin = Instantiate(prefabCoin, transform.position, prefabCoin.transform.rotation);
-
-        xp.GetComponent<DropLootLogic>().Initialize(landingPosXP);
-        coin.GetComponent<DropLootLogic>().Initialize(landingPosCoin);
-
-        xp.GetComponent<ResourceType>().InitializeValue(stats.XP);
-        coin.GetComponent<ResourceType>().InitializeValue(stats.Coins);
-
-        xp.transform.SetParent(GameObject.Find("bin").transform);
-        coin.transform.SetParent(GameObject.Find("bin").transform);
-
-        ///[Rare drops]
-    }
-
+#region Base Drops
     private Vector3 GetLootLandingPosition()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
@@ -171,5 +151,73 @@ public class Enemy_Health : MonoBehaviour
         }
         return transform.position;
     }
+
+    void SpawnLoot(GameObject prefab, int value, Vector3 landingPos)
+    {
+        GameObject loot = Instantiate(prefab, transform.position, prefab.transform.rotation);
+
+        loot.GetComponent<DropLootLogic>().Initialize(landingPos);
+        loot.GetComponent<ResourceType>().InitializeValue(value);
+        loot.transform.SetParent(GameObject.Find("bin").transform);
+    }
+
+    private void Loot()
+    {
+        Vector3 baseLandingPos = GetLootLandingPosition();
+
+        //XP
+        SpawnLoot(prefabs[0], stats.XP, baseLandingPos+new Vector3(Random.Range(-0.75f, 0.75f),0,Random.Range(-0.75f, 0.75f)));
+        //Coin
+        SpawnLoot(prefabs[1], stats.Coins, baseLandingPos+new Vector3(Random.Range(-0.75f, 0.75f),0,Random.Range(-0.75f, 0.75f)));
+    }
+
+    void SpawnRareLoot(GameObject prefab, Vector3 landingPos)
+    {
+        GameObject rare = Instantiate(prefab, transform.position, prefab.transform.rotation);
+
+        rare.GetComponent<DropLootLogic>().Initialize(landingPos);
+        rare.transform.SetParent(GameObject.Find("bin").transform);
+    }
+
+    void RareDrops()
+    {
+        float roll = Random.Range(0f, 100f); //Dice roll
+        Debug.Log("[0 - "+"<RareDropChance "+rareDropChance+"> - <ROLL "+roll+"> - 100|");
+        if(roll <= rareDropChance) //rareDropChance(15) - roll(13) - global |0-100| >  my chance |0-15| > roll |0-(13)-15| [PREMIO]
+        {
+            float totalWeight = 0f;
+
+            foreach(var drop in rareDrops)
+            {
+                totalWeight += drop.dropWeight; //Sums all drops chances
+            }
+
+            float randomWeight = Random.Range(0f, totalWeight); //gets 1 chance between 0 and total > |0-5|health & |5-10|shield (ex.)
+            Debug.Log("[RandomWeight "+randomWeight);
+            float currentWeight = 0f;
+
+            foreach(var drop in rareDrops)
+            {
+                currentWeight += drop.dropWeight;
+
+                if(randomWeight <= currentWeight) //if random chance |0-10| (2.4) <= total chances / instantiates drop.prefab which chance is (2.4)
+                {
+                    Debug.Log("[CurrentWeight "+currentWeight);
+                    Vector3 baseLandingPos = GetLootLandingPosition();
+                    SpawnRareLoot(drop.prefab, baseLandingPos + new Vector3(Random.Range(-0.75f, 0.75f),0f,Random.Range(-0.75f, 0.75f)));
+                    return;
+                }
+            }
+        }
+    }
 #endregion Drops
+}
+
+
+[System.Serializable] 
+public class RareDropData
+{
+    public GameObject prefab;
+    [Range(0f,100f)]
+    public float dropWeight;
 }
