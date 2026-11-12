@@ -4,7 +4,7 @@ using UnityEngine;
 public class WeaponsGeneralUpgrades : MonoBehaviour
 {
     public float damageMultiplier;
-    //public float totalAmmoMultiplier;
+    public float totalAmmoMultiplier;
     public float reloadSpeedMultiplier;
     public float fireRateMultiplier;
     public float precisionMultiplier;

@@ -22,12 +22,13 @@ public class CameraController : MonoBehaviour
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
+    {   
         _playerController = GetComponent<PlayerController>();
         _lookAction = InputSystem.actions.FindAction("Look");
         _escAction = InputSystem.actions.FindAction("Esc");
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
+
     }
 
     // Update is called once per frame
@@ -45,7 +46,7 @@ public class CameraController : MonoBehaviour
     {
         if(_playerController.Crouching)
         {
-            CameraRoot.transform.position  =  CameraRoot.transform.position - Vector3.down * CrounchingOffset;
+            CameraRoot.transform.position  = CameraRoot.transform.position - Vector3.down * CrounchingOffset;
         }
         else
         {

@@ -19,7 +19,7 @@ public class Sniper : Weapon
     public override float Precision { get; set; }
     public override float MaxDamageRange { get; set; }
     public override WeaponController _weaponController => GetComponentInParent<WeaponController>();
-
+    public override GameObject Croshair => GameObject.FindGameObjectWithTag("CrossHair");
 
     public Transform PSPoint;
     [SerializeField] private GameObject _sniperCroshair;

@@ -1,6 +1,8 @@
+//using Microsoft.Unity.VisualStudio.Editor;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class WeaponController : MonoBehaviour
 {
@@ -24,6 +26,7 @@ public class WeaponController : MonoBehaviour
 
     [Header("WEAPONS UI")]
     public TextMeshProUGUI _gunAmmo; 
+    public GameObject gunCroshair;
 
 
 
@@ -39,6 +42,7 @@ public class WeaponController : MonoBehaviour
         SecondWeapon = WeaponsList[1];
         CurrentWeapon.SetActive(true);
         weapon = CurrentWeapon.GetComponentInChildren<Weapon>();
+        gunCroshair = weapon.Croshair;
         generalUpgrades = GetComponentInParent<WeaponsGeneralUpgrades>();
     }
 
@@ -73,6 +77,29 @@ public class WeaponController : MonoBehaviour
         if(_switchAction.WasPressedThisFrame())
         {
             ChangeWeapons(CurrentWeapon,SecondWeapon);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        RaycastHit detectEnemy;
+        if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0.0f)),out detectEnemy, 100.0f))
+        {
+            Image[] images = gunCroshair.GetComponentsInChildren<Image>();
+            if(detectEnemy.collider.CompareTag("Enemy"))
+            {
+                foreach (var img in images)
+                {
+                    img.color = Color.red;
+                }
+            }
+            else
+            {
+                foreach (var img in images)
+                {
+                    img.color = Color.white;
+                }
+            }
         }
     }
 

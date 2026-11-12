@@ -5,22 +5,23 @@ using UnityEngine;
 public class UpgradesIncreaseFireRate : Upgrades
 {
 
-    [SerializeField] private float FRIncrease = 0.1f;
+    [SerializeField] private float FRIncreasePercentage = 0.1f;
 
     public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
-    {
-        throw new System.NotImplementedException();
-    }
+    {}
 
     public override void EspecialPlayerEffect(PlayerController playerController)
-    {
-        throw new System.NotImplementedException();
-    }
+    {}
 
     public override void EspecialWeaponEffect(Weapon weapon)
-    {
-        weapon.FireRate -= FRIncrease;
+    {   
+        //Calculate percentage and apply it to the weapon.
+        float value = weapon.FireRate * FRIncreasePercentage;
+
+        //Cut fire rate to maximum
+        weapon.FireRate = Mathf.Max(0.05f, weapon.FireRate - value);;
+
+
         Debug.Log(weapon.FireRate);
-        //throw new System.NotImplementedException();
     }
 }

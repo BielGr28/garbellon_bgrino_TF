@@ -7,11 +7,10 @@ public class UpgradeIncreaseDamage : Upgrades
     public float DamageIncrease = 1.10f;
 
     public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
-    {
-        throw new System.NotImplementedException();
-    }
+    {}
 
-    public override void EspecialPlayerEffect(PlayerController playerController){}
+    public override void EspecialPlayerEffect(PlayerController playerController)
+    {}
 
     /*public override void EspecialWeaponEffect(WeaponGeneral_Script upgradeWeapon)
     {

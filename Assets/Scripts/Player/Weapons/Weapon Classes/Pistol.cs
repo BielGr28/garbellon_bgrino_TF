@@ -15,6 +15,7 @@ public class Pistol : Weapon
 
     public override float Precision { set; get;}
     public override float MaxDamageRange { set; get; }
+    public override GameObject Croshair => GameObject.FindGameObjectWithTag("CrossHair");
 
 
     public override WeaponType WeaponType => WeaponType.Single;

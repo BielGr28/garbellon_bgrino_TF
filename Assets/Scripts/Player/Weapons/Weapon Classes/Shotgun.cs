@@ -16,6 +16,7 @@ public class Shotgun : Weapon
     public override float FireRate { get; set; }
     public override float Precision { get; set; }
     public override float MaxDamageRange { get; set; }
+    public override GameObject Croshair => GameObject.FindGameObjectWithTag("CrossHair");
 
     public float BulletSpread;
     public int BulletsPerShot = 6;

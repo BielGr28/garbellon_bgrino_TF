@@ -17,6 +17,7 @@ public class AssaultRifle : Weapon
     public override WeaponController _weaponController => GetComponentInParent<WeaponController>();
 
     public override float MaxDamageRange { get; set; }
+    public override GameObject Croshair => GameObject.FindGameObjectWithTag("CrossHair");
 
     public Transform PSPoint;
     
@@ -42,7 +43,6 @@ public class AssaultRifle : Weapon
 
     void Awake()
     {
-        
         SetDefaultStats(6.5f,40,1.5f,0.2f,10f, Range);
     }
 

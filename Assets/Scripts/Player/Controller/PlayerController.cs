@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     private float _speed;
     private float _bufferTimer;
     private float _verticalVelocity;
+    private float _maxVerticalVelocity;
     private float _slideVelocity;
     private Vector3 _slideDirection;
     private float _coyoteTimer;
@@ -83,14 +84,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(Sliding);
-        //Debug.Log($"CURRENT VELOCITY {_controller.velocity}");
-        
+       
         Move();
         Jump();
         GroundCheck();
         Slide();
-        //Debug.Log(_slideVelocity);
     }
 
     //Tells us if the player is touching the ground or not.
@@ -132,7 +130,6 @@ public class PlayerController : MonoBehaviour
         }  
        
         Crouch(move);
-        //Crouch(move.magnitude);
     }
 
     void Jump()
@@ -140,9 +137,9 @@ public class PlayerController : MonoBehaviour
         if(Grounded)
         {
             _coyoteTimer = CoyoteTime;
-            if(_verticalVelocity < -2f)
+            if(_verticalVelocity < -2.0f)
             {
-                _verticalVelocity = -2f;
+                _verticalVelocity = -2.0f;
             }
         }
         else
@@ -151,19 +148,34 @@ public class PlayerController : MonoBehaviour
         }
 
         if(_coyoteTimer > 0f && _jumpAction.WasPressedThisFrame())
-        {
-            Sliding = false;
-            //The Unity Documentation provides this formular in order to calculate the player jump. -- 
-           _verticalVelocity = Mathf.Sqrt(JumpHeight * -3f * Gravity);
-           
+        {  
+            if(Crouching)
+            {
+                Crouching = false;
+                _controller.height = 2.0f; 
+                _cameraController.AdjustCameraRoot();
+                Sliding = false;
+            } 
+
+            
+            //The Unity Documentation provides this formular in order to calculate the player jump. 
+            _verticalVelocity = Mathf.Sqrt(JumpHeight * -3f * Gravity);
         }
 
-        _verticalVelocity += Gravity *1.5f * Time.deltaTime;
+        _verticalVelocity +=  Gravity *2f * Time.deltaTime;
+
         _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f)* Time.deltaTime);
+
+        //If the player touches the celing while jumping, imitdeatly goes down.
+        if( (_controller.collisionFlags & CollisionFlags.Above) !=0)
+        {
+            _verticalVelocity  = 0.0f;
+        }
     }
 
     void Crouch(Vector3 movementVector) //(float currentSpeed)
     {
+        //Crouching false when not grounded;
         float currentSpeed = movementVector.magnitude;
         if(Grounded && _crouchAction.WasPressedThisFrame())
         {
@@ -185,7 +197,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        else if(Grounded && _crouchAction.WasReleasedThisFrame())
+        else if(Grounded && Crouching && _crouchAction.WasReleasedThisFrame())
         {
             Crouching = false;
             _controller.height = 2.0f;

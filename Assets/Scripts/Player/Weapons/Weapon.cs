@@ -10,6 +10,7 @@ public enum WeaponType
 public abstract class Weapon : MonoBehaviour
 {   
     public abstract WeaponController _weaponController{get;}
+    public abstract GameObject Croshair {get;}
     public abstract WeaponType WeaponType {get;}
     public abstract string Name {get;}
     public abstract float Damage {set; get;}
