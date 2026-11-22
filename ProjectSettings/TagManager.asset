@@ -8,6 +8,9 @@ TagManager:
   - explosionJump
   - Enemy
   - CrossHair
+  - Medkit
+  - Shield
+  - CinemachineCamera
   layers:
   - Default
   - TransparentFX

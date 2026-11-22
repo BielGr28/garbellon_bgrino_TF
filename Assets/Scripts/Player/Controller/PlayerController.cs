@@ -1,7 +1,19 @@
+using System;
 using System.Collections;
 //using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+
+/*public enum PlayerState
+{
+    IDLE,
+    WALKING,
+    SPRINTING,
+    JUMPING,
+    CROUCHING,
+    SLIDING
+}*/
 
 //Controls the player movement.
 public class PlayerController : MonoBehaviour
@@ -12,13 +24,13 @@ public class PlayerController : MonoBehaviour
     private InputAction _sprintAction;
     private InputAction _jumpAction;
     private InputAction _crouchAction;
-    //private Vector3 _movementAmt;
 
     [Header("PLAYER STATS")]
     public float MoveSpeed;
     public float SprintSpeed;
     public float SlideSpeed;
     public float SpeedChange;
+    //private PlayerState CurrentState{get;set;} = PlayerState.IDLE;
     public bool Crouching = false;
     public float CrouchingHeigth;
     public bool Sliding  = false;
@@ -35,19 +47,18 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController _controller;
     private CameraController _cameraController;
+    public PlayerHealth _playerHealth;
     private float _speed;
-    private float _bufferTimer;
     private float _verticalVelocity;
-    private float _maxVerticalVelocity;
     private float _slideVelocity;
     private Vector3 _slideDirection;
     private float _coyoteTimer;
-    private float _fallTimer;
  
     [Header("GROUND CHECK")]
     public bool Grounded = true;
     public float GroundedOffset = -0.1f;
     public float GroundedRadius = 0.5f;
+    
     public LayerMask GroundLayers;
 
 
@@ -79,12 +90,14 @@ public class PlayerController : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _cameraController = GetComponent<CameraController>();
+        _playerHealth = GetComponent<PlayerHealth>();
     }
 
     // Update is called once per frame
     void Update()
     {
        
+        //Debug.Log(_verticalVelocity);
         Move();
         Jump();
         GroundCheck();
@@ -96,6 +109,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 groundCheckPos = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
         Grounded = Physics.CheckSphere(groundCheckPos, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
+     
     }
 
 
@@ -108,6 +122,10 @@ public class PlayerController : MonoBehaviour
         if(_sprintAction.IsPressed())
         {
             _speed = SprintSpeed;
+        }
+        else if(Crouching)
+        {
+            _speed = MoveSpeed * 0.8f;
         }
         else
         {
@@ -151,10 +169,12 @@ public class PlayerController : MonoBehaviour
         {  
             if(Crouching)
             {
-                Crouching = false;
+                Crouching = false; 
+                Sliding = false;
+                _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
                 _controller.height = 2.0f; 
                 _cameraController.AdjustCameraRoot();
-                Sliding = false;
+               
             } 
 
             
@@ -183,16 +203,12 @@ public class PlayerController : MonoBehaviour
             _cameraController.AdjustCameraRoot();
             _controller.height = CrouchingHeigth;
             Debug.Log(currentSpeed);
-            //No agafa bé la velocitat.
-            //Ns que cony fer la veritat, he de trobar un amanera de detecar b'e la velocitat - moviemnt
-            //Poder millor ficar-ho dins del move pq puc agafar el move de referencia.
-            //float currentSpeed =  _controller.velocity.magnitude;
-            //Debug.Log($"PLAYER VELOCITY (Crouch): {_controller.velocity.magnitude}");
             if(currentSpeed > 0.0f)
             {
                 Debug.Log("Start Slide");
                 _slideDirection = movementVector; //_slideDirection = tranform.forward;
                 _slideVelocity = _speed * 1.5f;
+                _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.SlideFOV;
                 Sliding = true;
             }
 
@@ -200,27 +216,32 @@ public class PlayerController : MonoBehaviour
         else if(Grounded && Crouching && _crouchAction.WasReleasedThisFrame())
         {
             Crouching = false;
+            Sliding = false;
+            _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
             _controller.height = 2.0f;
             _cameraController.AdjustCameraRoot();
-            Sliding = false;
-        }  
+            
+        }
+  
     }  
 
     private void Slide()
     {
         if(Sliding && Grounded)
         {
+           // _cameraController.cinemachineCamera.Lens.FieldOfView = Mathf
             _slideVelocity -= _speed *1.5f * Time.deltaTime;
             _controller.Move(_slideDirection * _slideVelocity * Time.deltaTime);
+            _cameraController.cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(_cameraController.cinemachineCamera.Lens.FieldOfView,_cameraController.BaseFOV,2f * Time.deltaTime);
 
-            Debug.Log(_speed);
+           // Debug.Log(_speed);
 
             if(_slideVelocity <= _speed * 0.7f)
-            {
+            {   
                 Sliding = false;
+                _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
                 Debug.Log("STOP SLIDING");
             }
-
         }       
     }
 
@@ -234,7 +255,47 @@ public class PlayerController : MonoBehaviour
         else
             Gizmos.color = notGroundedColor;    
 
-        
         Gizmos.DrawSphere(new Vector3(transform.position.x,transform.position.y - GroundedOffset, transform.position.z),GroundedRadius);
+      
+       
     }
+
+    /*private void TryChangeState(PlayerState stateToChange)
+    {
+        if(CanChange(stateToChange))
+        {
+            Debug.Log($"PREVIOUS STATE: {CurrentState} || NEW STATE: {stateToChange}");
+            CurrentState = stateToChange; 
+        }
+        
+        //if(currentState = PlayerState.IDLE)
+    }
+
+    private bool CanChange(PlayerState newState)
+    {   
+        //Rules to Change between states
+        if(CurrentState == PlayerState.IDLE || CurrentState == PlayerState.WALKING)
+        {
+            if(newState == PlayerState.SLIDING) return false;
+        }
+
+        if(CurrentState == PlayerState.SPRINTING)
+        {
+            if(newState == PlayerState.CROUCHING) return false;
+        }
+
+        if(CurrentState == PlayerState.CROUCHING)
+        {
+            if(newState == PlayerState.SLIDING) return false;
+            if(newState == PlayerState.SPRINTING) return false;
+        }
+
+        if(CurrentState == PlayerState.SLIDING)
+        {
+            return true;
+        }
+
+        return true;
+    }*/
+
 }

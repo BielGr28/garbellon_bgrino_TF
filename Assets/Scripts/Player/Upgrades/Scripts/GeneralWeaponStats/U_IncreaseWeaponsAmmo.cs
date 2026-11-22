@@ -1,16 +1,29 @@
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "New Upgrade", menuName = "Upgrade/AllWeapons/Increase Weapons Ammo")]
 public class U_IncreaseWeaponsAmmo : Upgrades
 {
-    public float AMMOIncrease = 1.15f;
-    public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
-    {
-        generalUpgrades.totalAmmoMultiplier *= AMMOIncrease;
+    public float AMMOIncrease;
+
+    public override void UpgradeAllWeapons(WeaponController weaponController)
+    {   
+
+        if(weaponController.generalUpgrades.totalAmmoMultiplier > 0.0f)
+        {
+            weaponController.generalUpgrades.totalAmmoMultiplier *= AMMOIncrease;
+        }
+        else
+        {
+            weaponController.generalUpgrades.totalAmmoMultiplier = AMMOIncrease;
+        }
+
+        weaponController.UpdateAllWeaponsStats();
+        
     }
 
-    public override void EspecialPlayerEffect(PlayerController playerController)
+    public override void UpgradeCurrentWeapon(Weapon upgradeWeapon)
     {}
 
-    public override void EspecialWeaponEffect(Weapon upgradeWeapon)
+    public override void UpgradePlayer(PlayerController playerController)
     {}
 }

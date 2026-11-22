@@ -3,24 +3,25 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Upgrade", menuName = "Upgrade/Upgrade Weapon")]
 public class UpgradesWeapon : Upgrades
-{
-    public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
+{   
+    //Upgrade all weapon stats by 25%
+    
+    public override void UpgradeAllWeapons(WeaponController weaponController)
     {}
 
-    //[SerializeField] private float WeaponStatsMultiplier = 1.15f;
-
-
-    public override void EspecialPlayerEffect(PlayerController playerController)
-    {}
-
-    public override void EspecialWeaponEffect(Weapon weapon)
+    public override void UpgradeCurrentWeapon(Weapon upgradeWeapon)
     {
-        /*weapon.Damage *= WeaponStatsMultiplier;
-        weapon.TotalAmmo *= (int)WeaponStatsMultiplier;
-        weapon.ReloadSpeed = 
-        weapon.FireRate = 
-        weapon.Precision = */
-       // Debug.Log(weapon.FireRate);
-        //throw new System.NotImplementedException();
+        upgradeWeapon.Damage *= 1.25f;
+        
+        float frValue = upgradeWeapon.FireRate * 0.25f;
+        upgradeWeapon.FireRate = Mathf.Max(0.05f,upgradeWeapon.FireRate - frValue);
+
+        float currentAmmoPercentage = (float)upgradeWeapon.CurrentAmmo / (float)upgradeWeapon.TotalAmmo;
+        upgradeWeapon.TotalAmmo = Mathf.RoundToInt((float)upgradeWeapon.TotalAmmo * 1.25f);
+        upgradeWeapon.CurrentAmmo = Mathf.RoundToInt((float)upgradeWeapon.TotalAmmo * currentAmmoPercentage);
+        upgradeWeapon.UpdateWeaponUI(upgradeWeapon.CurrentAmmo);
     }
+
+    public override void UpgradePlayer(PlayerController playerController)
+    {}
 }

@@ -6,6 +6,8 @@ public class UpgradesManager : MonoBehaviour
     [SerializeField] PlayerXP_Script _playerXp;
     public WeaponController weaponController;
     public PlayerController playerController;
+    //public WeaponGeneralUpgrades weaponsGeneral;
+    public UpgradesList upgradesList;
     public List<Upgrades> PlayerUpgrades;
 
     public List<XPSO_Holder> UpgradesHolders;
@@ -34,32 +36,17 @@ public class UpgradesManager : MonoBehaviour
 
         switch(choosenUpgrade.upgradeType)
         {
-            case UpgradeType.Damage:
+            case UpgradeType.CurrentWepon:
                 //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
-                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
+                choosenUpgrade.UpgradeCurrentWeapon(weaponController.weapon);
             break;
 
-            case UpgradeType.Ammo:
-                //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
-                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
+             case UpgradeType.Player:
+                choosenUpgrade.UpgradePlayer(playerController);
             break;
 
-            case UpgradeType.FireRate:
-                //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
-                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
-            break;
-
-            case UpgradeType.Precision:
-                //choosenUpgrade.EspecialWeaponEffect(weaponController.CurrentWeapon.GetComponent<WeaponGeneral_Script>());
-                choosenUpgrade.EspecialWeaponEffect(weaponController.weapon);
-            break;
-
-            case UpgradeType.Jump:
-                choosenUpgrade.EspecialPlayerEffect(playerController);
-            break;
-
-            case UpgradeType.Speed:
-                choosenUpgrade.EspecialPlayerEffect(playerController);
+            case UpgradeType.Weapons:
+                choosenUpgrade.UpgradeAllWeapons(weaponController);
             break;
         }
 
@@ -89,7 +76,7 @@ public class UpgradesManager : MonoBehaviour
         for(int i = 0;  i < PlayerUpgrades.Count; i++)
         {
             Debug.Log($"Current Level: {_playerXp.currentLevel} || Upgrade Level: {PlayerUpgrades[i].unlockLevel}");
-            if(PlayerUpgrades[i].unlockLevel <= _playerXp.currentLevel)
+            if(upgradesList.Upgrades[i].unlockLevel <= _playerXp.currentLevel)
             {
                 availableUpgrades.Add(PlayerUpgrades[i]);
             }
@@ -110,7 +97,7 @@ public class UpgradesManager : MonoBehaviour
             currentUpgrade.upgradeDescription.text = upgradeItem.upgradeDescription;
             //currentUpgrade.upgradeIcon = upgradeItem.upgradeIcon;
 
-            //Remove the chosen upgrade form teh editable list to avoid repeating them.
+            //Remove the chosen upgrade from the editable list to avoid repeating them.
             availableUpgrades.RemoveAt(randomUpgrade);
             Debug.Log("Upgrades Count: " + i);
         }

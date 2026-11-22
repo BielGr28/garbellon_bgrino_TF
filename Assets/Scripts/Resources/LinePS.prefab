@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8614542723981256988}
   - component: {fileID: 359017483898997206}
+  - component: {fileID: -1058213373979947354}
   m_Layer: 0
   m_Name: LinePS
   m_TagString: Untagged
@@ -82,8 +83,8 @@ LineRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Positions:
-  - {x: 0.4733528, y: 0.9604391, z: 0.68755686}
-  - {x: 0.29615808, y: -0.0000000047550306, z: 2.8386087}
+  - {x: 9.198207, y: 2.5399163, z: 4.4573207}
+  - {x: 15.252, y: 1.9945228, z: 10.415634}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -113,10 +114,10 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0, g: 0, b: 1, a: 1}
+      key0: {r: 0, g: 0, b: 1, a: 0.4509804}
       key1: {r: 0.6784314, g: 0.84705883, b: 0.9019608, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
+      key2: {r: 0, g: 0, b: 0, a: 1}
+      key3: {r: 0, g: 0, b: 0, a: 1}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
@@ -130,17 +131,17 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
-      atime3: 0
+      atime1: 47224
+      atime2: 65535
+      atime3: 65535
       atime4: 0
       atime5: 0
       atime6: 0
       atime7: 0
-      m_Mode: 0
-      m_ColorSpace: -1
+      m_Mode: 2
+      m_ColorSpace: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 3
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
@@ -151,3 +152,15 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &-1058213373979947354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2482166760690314563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f34dee9d045654696c0700904dc049, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletTrail_TTL

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac24c8d281b97e549a9e68d014efdf85, type: 3}
+  m_Name: UpgradeWeapon
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradesWeapon
+  upgradeName: Better Weapon
+  upgradeIcon: {fileID: 0}
+  upgradeDescription: Upgrades Weapon Stats
+  upgradeType: 1
+  upgradeRarity: 4
+  unlockLevel: 5

@@ -7,21 +7,20 @@ public class UpgradesIncreaseFireRate : Upgrades
 
     [SerializeField] private float FRIncreasePercentage = 0.1f;
 
-    public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
+    public override void UpgradeAllWeapons(WeaponController weaponController)
     {}
 
-    public override void EspecialPlayerEffect(PlayerController playerController)
-    {}
-
-    public override void EspecialWeaponEffect(Weapon weapon)
-    {   
-        //Calculate percentage and apply it to the weapon.
-        float value = weapon.FireRate * FRIncreasePercentage;
+    public override void UpgradeCurrentWeapon(Weapon upgradeWeapon)
+    {
+        float value = upgradeWeapon.FireRate * FRIncreasePercentage;
 
         //Cut fire rate to maximum
-        weapon.FireRate = Mathf.Max(0.05f, weapon.FireRate - value);;
+        upgradeWeapon.FireRate = Mathf.Max(0.05f, upgradeWeapon.FireRate - value);;
 
 
-        Debug.Log(weapon.FireRate);
+        Debug.Log(upgradeWeapon.FireRate);
     }
+
+    public override void UpgradePlayer(PlayerController playerController)
+    {}
 }

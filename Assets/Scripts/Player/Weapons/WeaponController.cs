@@ -18,7 +18,7 @@ public class WeaponController : MonoBehaviour
     public bool canReload;
 
     public Weapon weapon;
-    public WeaponsGeneralUpgrades generalUpgrades;
+    public WeaponGeneralUpgrades generalUpgrades;
 
     public GameObject[] WeaponsList = new GameObject[2];
     public GameObject CurrentWeapon;
@@ -27,6 +27,8 @@ public class WeaponController : MonoBehaviour
     [Header("WEAPONS UI")]
     public TextMeshProUGUI _gunAmmo; 
     public GameObject gunCroshair;
+    public Image currentIcon;
+    public Image secondIcon;
 
 
 
@@ -37,31 +39,31 @@ public class WeaponController : MonoBehaviour
         _specialAction = InputSystem.actions.FindAction("Special");
         _reloadAction = InputSystem.actions.FindAction("Reload"); 
         _switchAction = InputSystem.actions.FindAction("Switch");
+        generalUpgrades = GetComponent<WeaponGeneralUpgrades>();
 
         CurrentWeapon = WeaponsList[0];
         SecondWeapon = WeaponsList[1];
+
+        //Goofy sequence and must surley not optimal at all. But does do job.
         CurrentWeapon.SetActive(true);
+        SecondWeapon.SetActive(true);
+
         weapon = CurrentWeapon.GetComponentInChildren<Weapon>();
         gunCroshair = weapon.Croshair;
-        generalUpgrades = GetComponentInParent<WeaponsGeneralUpgrades>();
+
+        UpdateAllWeaponsStats();
+
+        UpdateUI();
+
+        SecondWeapon.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(weapon.WeaponType == WeaponType.Single)
+        if(_shootAction.IsPressed() && canShoot)
         {
-            if(_shootAction.WasPressedThisFrame() && canShoot)
-            {
-                weapon.Shoot();   
-            }
-        }
-        else
-        {
-            if(_shootAction.IsPressed() && canShoot)
-            {
-                weapon.Shoot();   
-            }
+            weapon.Shoot();   
         }
         
         if(_reloadAction.WasPressedThisFrame() && canReload)
@@ -74,44 +76,65 @@ public class WeaponController : MonoBehaviour
            weapon.Especial();
         }
 
-        if(_switchAction.WasPressedThisFrame())
+        if(_switchAction.WasPressedThisFrame() && WeaponsList[1].GetComponentInChildren<Weapon>() != null)
         {
             ChangeWeapons(CurrentWeapon,SecondWeapon);
         }
     }
 
-    void FixedUpdate()
-    {
-        RaycastHit detectEnemy;
-        if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0.0f)),out detectEnemy, 100.0f))
-        {
-            Image[] images = gunCroshair.GetComponentsInChildren<Image>();
-            if(detectEnemy.collider.CompareTag("Enemy"))
-            {
-                foreach (var img in images)
-                {
-                    img.color = Color.red;
-                }
-            }
-            else
-            {
-                foreach (var img in images)
-                {
-                    img.color = Color.white;
-                }
-            }
-        }
-    }
-
-
     void ChangeWeapons(GameObject current, GameObject newWeapon)
     {
         current.SetActive(false);
         newWeapon.SetActive(true);
-        WeaponsList[1] = current;
+
         WeaponsList[0] = newWeapon;
+        WeaponsList[1] = current;
+
+        CurrentWeapon = WeaponsList[0];
+        SecondWeapon = WeaponsList[1];
+
         weapon = newWeapon.GetComponentInChildren<Weapon>();
+
+        UpdateUI();
+        weapon.UpdateWeaponUI(weapon.CurrentAmmo);
+        canShoot = true;
+        canReload = true;
     }
 
+    void UpdateUI()
+    {
+        currentIcon.sprite = weapon.Icon;
+        if(WeaponsList[1].GetComponentInChildren<Weapon>() != null)
+        { 
+            secondIcon.GetComponentInParent<RawImage>().enabled = true;
+            secondIcon.enabled = true;
+            secondIcon.sprite = WeaponsList[1].GetComponentInChildren<Weapon>().Icon;
+        }
+        else
+        {
+            secondIcon.GetComponentInParent<RawImage>().enabled = false;
+            secondIcon.enabled = false;
+        }
+
+    }
+
+    public void UpdateAllWeaponsStats()
+    {
+        for (var i = 0; i < WeaponsList.Length; i++)
+        {
+            if(WeaponsList[i].GetComponentInChildren<Weapon>() != null)
+            {
+                Debug.Log("Enter Upgrade");
+                Weapon currentWeapon = WeaponsList[i].GetComponentInChildren<Weapon>();
+                generalUpgrades.AppplyMultipliers(currentWeapon);
+            }
+            else
+            {
+                Debug.Log("Cant Upgrade");
+            }
+           
+        }
+        weapon.UpdateWeaponUI(weapon.CurrentAmmo);
+    }
 
 }

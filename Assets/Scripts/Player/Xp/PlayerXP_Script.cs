@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerXP_Script : MonoBehaviour
@@ -8,7 +9,7 @@ public class PlayerXP_Script : MonoBehaviour
     [Header("PLAYER XP")]
     [SerializeField] AnimationCurve experienceCurve;
     public float XPMultiplier;
-    public float CurrentXP;
+    public float currentXP;
 
     public float XPToLvlUp;
 
@@ -19,12 +20,12 @@ public class PlayerXP_Script : MonoBehaviour
 
     [SerializeField] UpgradesManager _upgradesManager;
     [SerializeField] WeaponController _weaponController;
+    [SerializeField] PlayerHealth _playerHealth;
 
     [Header("XP INTERFACE")]
     [SerializeField] TextMeshProUGUI levelText;
     [SerializeField] TextMeshProUGUI experienceText;
-
-    //[SerializeField] Image experienceFill;
+    [SerializeField] Image experienceBar;
  
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,7 +33,7 @@ public class PlayerXP_Script : MonoBehaviour
     {
 
         //XPCurve();
-        //GainXP(100.0f);
+        GainXP(100.0f);
 
     }
 
@@ -45,19 +46,20 @@ public class PlayerXP_Script : MonoBehaviour
 
     public void GainXP(float xpToGet)
     {
-        CurrentXP += xpToGet;
-        if(CurrentXP >= XPToLvlUp)
+        currentXP += xpToGet;
+        if(currentXP >= XPToLvlUp)
         {
             LevelUp();
         }
+        //UpdateInterface();
     }
 
 
     private void LevelUp()
     {
-        currentLevel++;
+        UpdateXPValues();
+        IncreaseHealthStats();
 
-        XPToLvlUp *= XPMultiplier;
         _upgradesManager.ShowUpgradesUI();
 
         Cursor.lockState = CursorLockMode.None;
@@ -67,23 +69,31 @@ public class PlayerXP_Script : MonoBehaviour
         Time.timeScale = 0.0f;
     }
 
-    void XPCurve()
+    private void IncreaseHealthStats()
     {
-        for (var i = 0; i <= 10; i++)
-        {
-            Debug.Log($"{XPToLvlUp} || {i}");
-            XPToLvlUp *= XPMultiplier;
-        }
+        float healthMultiplier = 1.05f;
+
+        float currentHealthPercentage = _playerHealth.currentHealth / _playerHealth.maxHealth;
+
+        _playerHealth.maxHealth *= healthMultiplier;
+        _playerHealth.currentHealth = _playerHealth.maxHealth * currentHealthPercentage;
+        _playerHealth.UpdateUI();
     }
 
-    void UpdateInterface()
+    void UpdateXPValues()
     {
-        
+        currentLevel++;
+        XPToLvlUp *= XPMultiplier;
+        float calculatedXp = XPToLvlUp - currentXP;
+        currentXP = calculatedXp;
+
+        //UpdateInterface();
     }
 
-    private void ShowUpgradeMenu()
+    /*void UpdateInterface()
     {
-        
-    }
-
+        levelText.text = $"{currentLevel}";
+        experienceText.text =  $"{currentXP} / {XPToLvlUp}";
+        experienceBar.fillAmount = currentXP/XPToLvlUp;
+    }*/
 }

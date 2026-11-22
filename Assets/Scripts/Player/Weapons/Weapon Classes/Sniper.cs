@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 
 public class Sniper : Weapon
 {
-    public override WeaponType WeaponType => WeaponType.Single;
+    // /public override WeaponType WeaponType => WeaponType.Single;
 
     public override string Name => "Sniper Rifle";
 
@@ -20,14 +21,19 @@ public class Sniper : Weapon
     public override float MaxDamageRange { get; set; }
     public override WeaponController _weaponController => GetComponentInParent<WeaponController>();
     public override GameObject Croshair => GameObject.FindGameObjectWithTag("CrossHair");
+    public override Animator _animator => GetComponent<Animator>();
+
+    public override Sprite Icon {set;get;}
 
     public Transform PSPoint;
-    [SerializeField] private GameObject _sniperCroshair;
+    //[SerializeField] private GameObject _sniperCroshair;
     [SerializeField] CinemachineCamera _camera;
     public float zoomValue = 35.0f;
     public float normalFOV = 70.0f;
 
     [Header("VFX ELEMENTS")]
+    [SerializeField] private Sprite _sniperIcon;
+    [SerializeField] private GameObject _sniperCroshair;
     [SerializeField] private Animator _pistolAnimator;
     [SerializeField] private GameObject _shootingPS;
     [SerializeField] private GameObject _impactPS;
@@ -36,7 +42,7 @@ public class Sniper : Weapon
     [SerializeField] private AudioClip _shootingClip;
     [SerializeField] private AudioClip _reloadingClip;
 
-    public override void SetDefaultStats(float damage,int totalAmmo, float reloadSpeed, float fireRate, float precision, float maxRange)
+    /*public override void SetDefaultStats(float damage,int totalAmmo, float reloadSpeed, float fireRate, float precision, float maxRange)
     {
         Damage = damage;
         TotalAmmo = totalAmmo;
@@ -45,17 +51,15 @@ public class Sniper : Weapon
         FireRate = fireRate;
         Precision = precision;
         MaxDamageRange = maxRange;
-    }
+    }*/
 
     void Awake()
     {
-        SetDefaultStats(20.0f,5,2.5f,1.0f,10f, Range);
-    }
+        SetDefaultStats(20.0f,5,1.5f,1.0f,10f, Range);
+        Icon = _sniperIcon;
+        Debug.Log("ICOOON")
+;    }
 
-    public override void CroshairState(GameObject croshair)
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Shoot()
     {
         if(CurrentAmmo > 0)
@@ -64,6 +68,9 @@ public class Sniper : Weapon
 
            // _audioSource.clip = _shootingClip;
            // _audioSource.Play();
+
+           _animator.SetTrigger(AN_SHOOT);
+            CroshairState(Croshair);
 
             if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0.0f)),out hit, Range))
             {
@@ -80,8 +87,8 @@ public class Sniper : Weapon
                 if(hit.collider.gameObject.CompareTag("Enemy"))
                 {
                     float distanceToTarget = Vector3.Distance(PSPoint.position,hit.point);
-                    float multiplier = _weaponController.generalUpgrades.damageMultiplier;
-                    Debug.Log($"DISTANCE: {distanceToTarget} || DAMAGE: {CalculateDamage(distanceToTarget, Damage,multiplier)}");
+                    //float multiplier = _weaponController.generalUpgrades.damageMultiplier;
+                    Debug.Log($"DISTANCE: {distanceToTarget} || DAMAGE: {CalculateDamage(distanceToTarget,_weaponController.generalUpgrades)}");
                     
                     //hit.collider.GetComponent<Enemy_Health>().EnemyDamaged(Damage);
                 }
@@ -89,7 +96,7 @@ public class Sniper : Weapon
             }
 
             CurrentAmmo -= 1;
-            UpdateUI(CurrentAmmo);
+            UpdateWeaponUI(CurrentAmmo);
             IEnumerator coroutine = ShootingDelay(FireRate);
             StartCoroutine(coroutine);
         }
@@ -119,43 +126,5 @@ public class Sniper : Weapon
        
     }
 
-    public override void Reload()
-    {
-        IEnumerator coroutine = ReloadingDelay(ReloadSpeed);
-        StartCoroutine(coroutine);
-    }
-
-       public override IEnumerator ShootingDelay(float delay)
-    {
-        _weaponController.canShoot = false;
-        yield return new WaitForSeconds(delay);
-        _weaponController.canShoot = true;
-    }    
-    
-    public override IEnumerator ReloadingDelay(float delay)
-    {
-       _weaponController.canShoot = false;
-       _weaponController.canReload = false;
-       yield return new WaitForSeconds(delay);
-       CurrentAmmo = TotalAmmo;
-       UpdateUI(CurrentAmmo);
-       _weaponController.canShoot = true;
-       _weaponController.canReload = true;
-    }
-
-    public override void UpdateUI(int ammoUI)
-    {
-        string UiString = $"{ammoUI} / {TotalAmmo}";
-        _weaponController._gunAmmo.text = UiString; 
-    }
-
-    public override void SetLineRenderer(LineRenderer lineRenderer, Transform startPos, Vector3 endPos)
-    {
-        lineRenderer.startColor = Color.skyBlue;
-        lineRenderer.endColor = Color.lightBlue;
-
-        lineRenderer.SetPosition(0,startPos.position);
-        lineRenderer.SetPosition(1,endPos);
-    }
 
 }

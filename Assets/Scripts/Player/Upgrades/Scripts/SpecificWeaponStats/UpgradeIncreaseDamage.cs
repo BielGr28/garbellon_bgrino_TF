@@ -4,23 +4,17 @@ using UnityEngine;
 public class UpgradeIncreaseDamage : Upgrades
 {
 
-    public float DamageIncrease = 1.10f;
+    [SerializeField] float DamageIncrease = 1.10f;
 
-    public override void EspecialGeneralWeaponEffect(WeaponsGeneralUpgrades generalUpgrades)
+    public override void UpgradeAllWeapons(WeaponController weaponController)
     {}
 
-    public override void EspecialPlayerEffect(PlayerController playerController)
-    {}
-
-    /*public override void EspecialWeaponEffect(WeaponGeneral_Script upgradeWeapon)
-    {
-        upgradeWeapon.Damage = upgradeWeapon.Damage * DamageIncrease;
-        Debug.Log(upgradeWeapon.Damage);
-    }*/
-
-    public override void EspecialWeaponEffect(Weapon upgradeWeapon)
+    public override void UpgradeCurrentWeapon(Weapon upgradeWeapon)
     {
         upgradeWeapon.Damage = upgradeWeapon.Damage * DamageIncrease;
         Debug.Log(upgradeWeapon.Damage);
     }
+
+    public override void UpgradePlayer(PlayerController playerController)
+    {}
 }

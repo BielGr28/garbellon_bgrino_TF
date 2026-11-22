@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,11 +11,14 @@ public class CameraController : MonoBehaviour
     
     [Header("CINEMACHINE")]
     public GameObject CameraRoot;
+    public CinemachineCamera cinemachineCamera;
     private float _cameraSensitivity;
     public float RotationSpeed;
     public float TopClamp;
     public float BottomClamp;
     public float CrounchingOffset;
+    public float BaseFOV;
+    public float SlideFOV;
     
     
     private PlayerController _playerController;
@@ -23,6 +27,7 @@ public class CameraController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {   
+        cinemachineCamera = GameObject.FindGameObjectWithTag("CinemachineCamera").GetComponent<CinemachineCamera>();
         _playerController = GetComponent<PlayerController>();
         _lookAction = InputSystem.actions.FindAction("Look");
         _escAction = InputSystem.actions.FindAction("Esc");
@@ -34,12 +39,23 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(cinemachineCamera.Lens.FieldOfView);
         CameraRotation();
 
         if(_escAction.WasPressedThisFrame())
         {
             ChangeCursorState();
         }
+
+        /*if(_playerController.Sliding)
+        {
+            //cinemachineCamera.Lens.FieldOfView = SlideFOV;
+            cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(cinemachineCamera.Lens.FieldOfView,BaseFOV, 3.0f*Time.deltaTime);
+        }
+        else
+        {
+            //cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(cinemachineCamera.Lens.FieldOfView,BaseFOV, 2.0f * Time.deltaTime);
+        }*/
     }
 
     public void AdjustCameraRoot()
@@ -47,6 +63,7 @@ public class CameraController : MonoBehaviour
         if(_playerController.Crouching)
         {
             CameraRoot.transform.position  = CameraRoot.transform.position - Vector3.down * CrounchingOffset;
+            
         }
         else
         {
@@ -79,14 +96,15 @@ public class CameraController : MonoBehaviour
 
             //Allows the camera to rotate.
             CameraRoot.transform.localRotation = Quaternion.Euler(_cameraSensitivity,0.0f,0.0f);
-            if(!_playerController.Sliding)
+            transform.Rotate(Vector3.up * _cameraRotation);
+            /*if(!_playerController.Sliding)
             {
                 //Makes the whole player body rotate, including the camera.
 
                 transform.Rotate(Vector3.up * _cameraRotation);
                 //transform.Rotate(Vector3.up * cameraX);
                 //transform.rotation = Quaternion.Euler(0.0f,_cameraRotation * 1.0f,0.0f);
-            }
+            }*/
    
 
             //Debug.Log($"CAMERA ROTATION: {CameraRoot.transform.localRotation}  || PLAYER ROTATIOn: {transform.rotation}");
