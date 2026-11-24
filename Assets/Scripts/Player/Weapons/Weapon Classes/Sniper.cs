@@ -8,9 +8,9 @@ using UnityEngine.UI;
 
 public class Sniper : Weapon
 {
-    // /public override WeaponType WeaponType => WeaponType.Single;
+    public override WeaponType WeaponType => WeaponType.SNIPER_RIFLE;
 
-    public override string Name => "Sniper Rifle";
+    public override string WeaponName => "Sniper Rifle";
 
     public override float Damage { get; set; }
     public override int TotalAmmo { get; set; }

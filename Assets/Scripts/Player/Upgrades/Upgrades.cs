@@ -35,6 +35,8 @@ public  abstract class Upgrades : ScriptableObject
     //Level necesary to unlock the upgrade.
     public int unlockLevel;
 
+    public int shopCost;
+
     //(Canviare els noms pq siguin més clars, pero pq veguis com funciona)
     //Method used to upgrade the current weapon stats
     public abstract void UpgradeCurrentWeapon(Weapon upgradeWeapon);

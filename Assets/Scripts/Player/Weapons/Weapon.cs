@@ -6,18 +6,20 @@ using UnityEngine;
 
 using UnityEngine.UI;
 
-/*public enum WeaponType
+public enum WeaponType
 {
-    Single,
-    Automatic
-}*/
+    PISTOL,
+    ASSAULT_RIFLE,
+    SHOTGUN,
+    SNIPER_RIFLE
+}
 public abstract class Weapon : MonoBehaviour
 {   
     public abstract WeaponController _weaponController{get;}
     public abstract Sprite Icon{set;get;}
     public abstract GameObject Croshair {get;}
-    //public abstract WeaponType WeaponType {get;}
-    public abstract string Name {get;}
+    public abstract WeaponType WeaponType {get;}
+    public abstract string WeaponName {get;}
     public abstract float Damage {set; get;}
     public abstract int TotalAmmo {set; get;}
     public abstract int CurrentAmmo { set; get;}
@@ -93,6 +95,11 @@ public abstract class Weapon : MonoBehaviour
             }
         }
 
+       
+    }
+
+    void Update()
+    {
         RectTransform rect = Croshair.GetComponent<RectTransform>();
         
         Vector3 currentScale = rect.localScale;

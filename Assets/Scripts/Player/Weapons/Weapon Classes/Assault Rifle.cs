@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class AssaultRifle : Weapon
 {
 
-    //public override WeaponType WeaponType => WeaponType.Automatic;
+    public override WeaponType WeaponType => WeaponType.ASSAULT_RIFLE;
 
-    public override string Name => "Assault Rifle";
+    public override string WeaponName => "Assault Rifle";
 
     public override float Damage { get; set; }
     public override int TotalAmmo { get; set; }

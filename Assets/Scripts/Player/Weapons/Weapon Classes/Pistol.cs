@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class Pistol : Weapon
 {
-    public override string Name => "Pistol";
+
+    public override WeaponType WeaponType => WeaponType.PISTOL;
+    public override string WeaponName => "Pistol";
     public override float Damage {set;  get;}
     public override int TotalAmmo {set;  get;}
 
@@ -20,7 +22,7 @@ public class Pistol : Weapon
     public override GameObject Croshair => GameObject.FindGameObjectWithTag("CrossHair");
 
 
-    //public override WeaponType WeaponType => WeaponType.Single;
+    
 
     public override WeaponController _weaponController => GetComponentInParent<WeaponController>();
 
@@ -53,7 +55,7 @@ public class Pistol : Weapon
 
     void Awake()
     {
-        SetDefaultStats(4.0f,20,1.1f,0.5f,0.1f,20.0f);
+        SetDefaultStats(4.0f,20,1.1f,0.5f,.02f,20.0f);
         Icon = _pistolIcon;
     }
 
@@ -75,8 +77,14 @@ public class Pistol : Weapon
             _animator.SetTrigger(AN_SHOOT);
             CroshairState(Croshair);
 
-            if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f,0.5f,0.0f)),out hit, Range))
+            Debug.Log(Precision);
+            //Precision /= 100f;
+            float xOffsett =  Random.Range(-Precision, Precision);
+            float yOffsett =  Random.Range(-Precision, Precision);
+
+            if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f + xOffsett,0.5f + yOffsett,0.0f)),out hit, Range))
             {
+       
 
                 SetLineRenderer(_shootingPS.GetComponent<LineRenderer>(),PSPoint,hit.point);
                 GameObject bulletTrail;

@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class Shotgun : Weapon
 {
-    //public override WeaponType WeaponType => WeaponType.Single;
+    public override WeaponType WeaponType => WeaponType.SHOTGUN;
     public override WeaponController _weaponController => GetComponentInParent<WeaponController>();
 
-    public override string Name => "Shotgun";
+    public override string WeaponName => "Shotgun";
 
     public override float Damage { get; set; }
     public override int TotalAmmo { get; set; }

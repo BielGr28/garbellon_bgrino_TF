@@ -6,19 +6,26 @@ public enum ESPECIALEFFECTS
     HIGHGER50AMMO,
     BELOW50AMMO,
     CLOSER5METERS,
-    FURTHERMAXDISTANCE
+    FURTHERMAXDISTANCE,
+    CRITCHANCE,
+    INCREASE_SHOTGUN,
+    INCREASE_SNIPER,
+    INCREASE_RIFLE,
+    INCREASE_PISTOL
 }
-//Used to hold upgrades though for all player weapons.
+//Manages the players upgrades that effect all weapons.
 public class WeaponGeneralUpgrades : MonoBehaviour
 {
     public List<ESPECIALEFFECTS> playerEspecials;
     public float damageMultiplier;
     public float totalAmmoMultiplier;
     public float fireRateMultiplier;
+    public float critChance;
     //public float precisionMultiplier;
 
     public float outputDamage;
 
+    //Calculate weapon damage based on the player current upgrades.
     public float ApplyEspcialEffects(Weapon weapon,float hitDistance)
     {
         if(playerEspecials != null)
@@ -31,7 +38,7 @@ public class WeaponGeneralUpgrades : MonoBehaviour
                 {
                     case ESPECIALEFFECTS.HIGHGER50AMMO:
                         outputDamage = Damage_Higher50Ammo(outputDamage,weapon.CurrentAmmo,weapon.TotalAmmo);
-                        Debug.Log($"Higher 50 Ammo");
+                        Debug.Log("Higher 50 Ammo");
                         break;
 
                     case ESPECIALEFFECTS.BELOW50AMMO:
@@ -48,6 +55,30 @@ public class WeaponGeneralUpgrades : MonoBehaviour
                         outputDamage = Damage_FurtherMaxRange(outputDamage,hitDistance,weapon.MaxDamageRange);
                         Debug.Log("Furtehr Max");
                         break;
+                    case ESPECIALEFFECTS.CRITCHANCE:
+                        outputDamage = Damage_CriticalChance(outputDamage);
+                        Debug.Log("Crit Chance");
+                    break;
+
+                    case ESPECIALEFFECTS.INCREASE_PISTOL:
+                        outputDamage = Damage_Pistols(outputDamage,weapon.WeaponType);
+                        Debug.Log("Pistols Multiplier");
+                    break;
+
+                    case ESPECIALEFFECTS.INCREASE_SHOTGUN:
+                        outputDamage = Damage_Shotguns(outputDamage,weapon.WeaponType);
+                        Debug.Log("Shotguns Multiplier");
+                    break;
+
+                    case ESPECIALEFFECTS.INCREASE_RIFLE:
+                        outputDamage = Damage_Rifles(outputDamage,weapon.WeaponType);
+                        Debug.Log("Rifles Multiplier");
+                    break;
+
+                    case ESPECIALEFFECTS.INCREASE_SNIPER:
+                        outputDamage = Damage_Snipers(outputDamage,weapon.WeaponType);
+                        Debug.Log("Snipers Multiplier");
+                    break;
                 }
                 Debug.Log(outputDamage);
             }
@@ -85,6 +116,7 @@ public class WeaponGeneralUpgrades : MonoBehaviour
     }
 
 
+#region ESPECIAL EFFECTS
     public float Damage_Higher50Ammo(float baseDamage, int currentAmmo, int totalAmmo)
     {
         if(currentAmmo > totalAmmo/2)
@@ -128,7 +160,7 @@ public class WeaponGeneralUpgrades : MonoBehaviour
         if(hitDistance >= maxRange)
         {
             float value;
-            value = baseDamage * 1.5f;
+            value = baseDamage * 2f;
             return value;
         }
         else
@@ -137,5 +169,75 @@ public class WeaponGeneralUpgrades : MonoBehaviour
         }
  
     }
+
+    public float Damage_CriticalChance(float baseDamage)
+    {
+        float random = Random.Range(0.1f, 1.0f);
+
+        if(random <= critChance)
+        {
+            float outdamage = baseDamage * 1.5f;
+            return outdamage;
+        }
+        else
+        {
+          return baseDamage;       
+        }
+        
+    }
+
+    public float Damage_Shotguns(float baseDamage, WeaponType weaponType)
+    {
+        if(weaponType.Equals("Shotgun"))
+        {
+            float outdamage = baseDamage * 1.15f;
+            return outdamage;
+        }
+        else
+        {
+            return baseDamage;
+        }
+        
+    }
+
+    public float Damage_Snipers(float baseDamage, WeaponType weaponType)
+    {
+        if(weaponType.Equals("Sniper"))
+        {
+            float outdamage = baseDamage * 1.15f;
+            return outdamage;
+        }
+        else
+        {
+            return baseDamage;
+        }
+    }
+
+    public float Damage_Pistols(float baseDamage, WeaponType weaponType)
+    {
+        if(weaponType.Equals("Pistol"))
+        {
+            float outdamage = baseDamage * 1.15f;
+            return outdamage;
+        }
+        else
+        {
+            return baseDamage;
+        }
+    }
+
+    public float Damage_Rifles(float baseDamage, WeaponType weaponType)
+    {
+        if(weaponType.Equals("Rifle"))
+        {
+            float outdamage = baseDamage * 1.15f;
+            return outdamage;
+        }
+        else
+        {
+            return baseDamage;
+        }
+    }
+#endregion
 
 }

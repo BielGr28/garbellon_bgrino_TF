@@ -7,7 +7,6 @@ public class PlayerXP_Script : MonoBehaviour
 {
 
     [Header("PLAYER XP")]
-    [SerializeField] AnimationCurve experienceCurve;
     public float XPMultiplier;
     public float currentXP;
 
