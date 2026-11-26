@@ -25,7 +25,7 @@ public abstract class EnemyLogic : MonoBehaviour
 
     protected virtual void Awake()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        player = GameObject.FindWithTag("Player").transform.parent;
         playerCollider = player.GetComponentInChildren<CapsuleCollider>();
         
         stats = GetComponent<Enemy_Stats>();

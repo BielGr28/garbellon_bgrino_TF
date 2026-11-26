@@ -5,12 +5,13 @@ using UnityEngine;
 public class DropLootLogic : MonoBehaviour
 {
     [Header("References")]
-    private ResourceType resourceType;
+    private DropsType dropsType;
     private Collider playerCol;
     [Header("Drop Effect")]
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float dropDuration = 0.5f;
     private bool hasLanded;
+    private Vector3 startFloatPos;
     [Header("Loot Follow Player")]
     private float playerDistance;
     [SerializeField] private float detectionRange;
@@ -20,14 +21,15 @@ public class DropLootLogic : MonoBehaviour
 
     void Awake()
     {
-        resourceType = GetComponent<ResourceType>();
-        playerCol = GameObject.FindWithTag("Player").GetComponent<Collider>();
-        hasLanded = false; isLooted = false;
+        dropsType = GetComponent<DropsType>();
+        playerCol = GameObject.FindWithTag("Player").transform.parent.GetComponent<Collider>();
+        hasLanded = false; 
+        isLooted = false;
     }
     private void Update()
     {
         FloatingLoot();
-        XpFollowPlayer();
+        LootFollowPlayer();
     }
 
 
@@ -61,15 +63,16 @@ public class DropLootLogic : MonoBehaviour
         }
 
         transform.position = targetPosition;
+        startFloatPos = targetPosition;
         hasLanded = true;
     }
 
-    private void FloatingLoot() //Loot floating effect
+   private void FloatingLoot() //Loot floating effect
     {
         if (hasLanded && !isLooted)
         {
-            Vector3 pos = transform.position;
-            pos.y += Mathf.Sin(Time.time * 3f) * 0.0032f;
+            Vector3 pos = startFloatPos;
+            pos.y += Mathf.Sin(Time.time * 3f) * 0.2f;
             transform.position = pos;
 
             CoinSpinAnim();
@@ -79,25 +82,27 @@ public class DropLootLogic : MonoBehaviour
 
 
 #region Specific functions
-    private void XpFollowPlayer() //Allows follow player when in range
+    private void LootFollowPlayer() //Allows follow player when in range
     {
-        if(resourceType.currentResource == ResourceType.Resource.XP)
+        if(hasLanded)
         {
             playerDistance = Vector3.Distance(transform.position, playerCol.transform.position);
             if(playerDistance <= detectionRange)
             {
                 isLooted = true;
+                GetComponent<DisableObjectOnTIme>().enabled = false; //when player reached distance no need to destroy loot
 
                 float incrementalSpeed = Mathf.Lerp(followSpeed/2, followSpeed*1.5f, 1f-(playerDistance/detectionRange)); //Loot speed increases on "chase"
 
                 transform.position = Vector3.MoveTowards(transform.position, playerCol.bounds.center, incrementalSpeed * Time.deltaTime); //Loot moves to player
             }
         }
+        
     }
 
     void CoinSpinAnim()
     {
-        if(resourceType.currentResource == ResourceType.Resource.Coin)
+        if(dropsType.currentDrop == DropsType.Drop.Coin)
         {
             transform.Rotate(0f, 0f, 90f * Time.deltaTime, Space.Self);
         }

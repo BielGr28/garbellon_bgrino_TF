@@ -10,7 +10,7 @@ public class StoreManager : MonoBehaviour
 {
     [Header("General Refs")]
     [SerializeField] private GameObject storeMenu;
-    public bool isStoreOpened;
+    public static bool isStoreOpened;
 
     [Header("Economy")]
     [SerializeField] private ResourceManager resourceManager;
@@ -22,7 +22,6 @@ public class StoreManager : MonoBehaviour
     void Awake()
     {
         storeMenu.SetActive(false);
-        playerCoinBanner.SetActive(true);
         isStoreOpened = false;
     }
 

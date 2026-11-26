@@ -2,11 +2,12 @@ using System.Collections;
 using Mono.Cecil;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyLogic))]
 public class Enemy_Health : MonoBehaviour
 {
     private Enemy_Stats stats;
     private EnemyLogic enemy;
+    private LayerMask groundLayer;
+    private Transform bin;
 
     [Header("Drops")]
     [SerializeField] private GameObject[] prefabs; //0-xp > 1-coin
@@ -24,6 +25,8 @@ public class Enemy_Health : MonoBehaviour
     {
         stats = GetComponent<Enemy_Stats>();
         enemy = GetComponent<EnemyLogic>();
+        groundLayer = LayerMask.GetMask("Ground");
+        bin = GameObject.Find("bin").transform;
 
         hasDied = false;
         animTimer = 0f;
@@ -45,7 +48,7 @@ public class Enemy_Health : MonoBehaviour
 
             //VFX sparks
             ParticleSystem sparks = Instantiate(enemy.effects[1], hit.point, Quaternion.LookRotation(hit.normal));//transform.position, enemy.effects[1].transform.rotation);
-            sparks.Play(); sparks.transform.SetParent(GameObject.Find("bin").transform);
+            sparks.Play(); sparks.transform.SetParent(bin);
             Destroy(sparks.gameObject, 2f);
         }
     }
@@ -53,7 +56,7 @@ public class Enemy_Health : MonoBehaviour
 
 
 #region Die
-    private void Die()
+    public void Die()
     {
         if(hasDied)
         return;
@@ -65,8 +68,8 @@ public class Enemy_Health : MonoBehaviour
             //Animation 
             if(CheckForExistingAnimation("isDead"))
             {
+                animTimer = GetAnimationLength("_Die");
                 enemy.animator.SetTrigger("isDead");
-                animTimer = GetAnimationLength("Tanc_Attack_v3");
             }
             else { animTimer = 0f; }
 
@@ -77,8 +80,8 @@ public class Enemy_Health : MonoBehaviour
     private IEnumerator DieRoutine(float timer)
     {
         //Drops
-            Loot();
-            RareDrops();
+            Loot(); Debug.Log("BASE LOOT");
+            RareDrops(); 
         
         //Disable
             foreach (var component in gameObject.GetComponentsInChildren<Behaviour>())
@@ -93,10 +96,9 @@ public class Enemy_Health : MonoBehaviour
         yield return new WaitForSeconds(timer);
         //VFX
             Vector3 vfxPos = transform.GetComponentInChildren<MeshCollider>().bounds.center;
-
             ParticleSystem explosion = Instantiate(enemy.effects[0], vfxPos, Quaternion.identity);
             explosion.Play(); explosion.transform.localScale *= 1.4f;
-            explosion.transform.SetParent(GameObject.Find("bin").transform);
+            explosion.transform.SetParent(bin);
 
         //SFX
             enemy.audioSource.PlayOneShot(audioExplosion);
@@ -110,12 +112,12 @@ public class Enemy_Health : MonoBehaviour
 
 
 #region Animation Data
-    private bool CheckForExistingAnimation(string clipname)
+    private bool CheckForExistingAnimation(string parameter)
     {
-        //Used to find specific animation in current enemy
+        //Used to find specific animation parameter in current enemy
         foreach(AnimatorControllerParameter param in enemy.animator.parameters)
         {
-            if(param.name == clipname)
+            if(param.name == parameter)
             {
                 return true;
             }
@@ -145,10 +147,12 @@ public class Enemy_Health : MonoBehaviour
 #region Base Drops
     private Vector3 GetLootLandingPosition()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, groundLayer))
         {
+            Debug.Log($"GROUND HIT -> Object: {hit.collider.name} | Point: {hit.point}");
             return hit.point + Vector3.up;
         }
+        Debug.Log("NO GROUND FOUND!");
         return transform.position;
     }
 
@@ -157,8 +161,8 @@ public class Enemy_Health : MonoBehaviour
         GameObject loot = Instantiate(prefab, transform.position, prefab.transform.rotation);
 
         loot.GetComponent<DropLootLogic>().Initialize(landingPos);
-        loot.GetComponent<ResourceType>().InitializeValue(value);
-        loot.transform.SetParent(GameObject.Find("bin").transform);
+        loot.GetComponent<DropsType>().InitializeValue(value);
+        loot.transform.SetParent(bin);
     }
 
     private void Loot()
@@ -167,8 +171,10 @@ public class Enemy_Health : MonoBehaviour
 
         //XP
         SpawnLoot(prefabs[0], stats.XP, baseLandingPos+new Vector3(Random.Range(-0.75f, 0.75f),0,Random.Range(-0.75f, 0.75f)));
+        Debug.Log("XP");
         //Coin
         SpawnLoot(prefabs[1], stats.Coins, baseLandingPos+new Vector3(Random.Range(-0.75f, 0.75f),0,Random.Range(-0.75f, 0.75f)));
+        Debug.Log("COIN");    
     }
 
     void SpawnRareLoot(GameObject prefab, Vector3 landingPos)
@@ -176,7 +182,7 @@ public class Enemy_Health : MonoBehaviour
         GameObject rare = Instantiate(prefab, transform.position, prefab.transform.rotation);
 
         rare.GetComponent<DropLootLogic>().Initialize(landingPos);
-        rare.transform.SetParent(GameObject.Find("bin").transform);
+        rare.transform.SetParent(bin);
     }
 
     void RareDrops()
@@ -200,7 +206,7 @@ public class Enemy_Health : MonoBehaviour
             {
                 currentWeight += drop.dropWeight;
 
-                if(randomWeight <= currentWeight) //if random chance |0-10| (2.4) <= total chances / instantiates drop.prefab which chance is (2.4)
+                if(randomWeight <= currentWeight) //if random weight |0-10| (2) <= total chances / instantiates drop.prefab which chance is (2)
                 {
                     Debug.Log("[CurrentWeight "+currentWeight);
                     Vector3 baseLandingPos = GetLootLandingPosition();

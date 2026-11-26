@@ -82,8 +82,9 @@ public class EnemyLogic_Tank : EnemyLogic
         if(canDealDamage && other.CompareTag("Player"))
         {
             Debug.Log("Player Hitted!");
-            //PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            //playerHealth?.TakeDamage(owner.Damage);
+
+            ///PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
+            ///playerHealth?.TakeDamage(stats.damage);
         }
         DisableAttackCollider();
     }
@@ -98,15 +99,5 @@ public class EnemyLogic_Tank : EnemyLogic
         canDealDamage = false;
         attackCollider.enabled = false;
     }
-
-    private void OnDrawGizmos()
-    {
-        if(Application.isPlaying)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(transform.position, stats.attackRange); //display attack range
-        }
-    }
-
 #endregion AttackLogic
 }

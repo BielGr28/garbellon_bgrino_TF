@@ -8,6 +8,7 @@ public class EnemyLogic_Dron : EnemyLogic
     public enum DroneChargeState
     { Warning, Charging, Stunned }
     private DroneChargeState chargeState;
+    private Transform bin;
 
     [Header ("Dron Settings")]
     [SerializeField] private int maxCharges = 3; //Charges needed for dron to self-destruct
@@ -30,13 +31,16 @@ public class EnemyLogic_Dron : EnemyLogic
     {
         base.Awake();
 
+        bin = GameObject.Find("bin").transform;
+
         //Set instances for modifiying local mat
         Material[] mats = dronRender.materials;
         eyeMat = mats[4];
         reactorMat = mats[5];
     }
 
-    #region States Logic
+
+#region States Logic
     public override void IdleLogic() //What does while waiting
     {
         //Makes effect of dron disabled
@@ -164,8 +168,8 @@ public class EnemyLogic_Dron : EnemyLogic
 
         Vector3 pos = transform.position;
 
-        pos.x = Mathf.MoveTowards(pos.x, targetPos.x, stats.speed/9 * Time.deltaTime); //speed chasing player
-        pos.z = Mathf.MoveTowards(pos.z, targetPos.z, stats.speed/9 * Time.deltaTime); 
+        pos.x = Mathf.MoveTowards(pos.x, targetPos.x, stats.speed/8 * Time.deltaTime); //speed chasing player
+        pos.z = Mathf.MoveTowards(pos.z, targetPos.z, stats.speed/8 * Time.deltaTime); 
         pos.y = Mathf.MoveTowards(pos.y, targetPos.y, stats.speed/5 * Time.deltaTime); //speed recovering height
 
         transform.position = pos;
@@ -181,19 +185,17 @@ public class EnemyLogic_Dron : EnemyLogic
         Collider[] hits = Physics.OverlapSphere(transform.position, stats.attackRange); 
         foreach(Collider hit in hits)
         {
-            //Debug.Log("Player Hitted!");
-            //PlayerHealth playerHealth = hit.GetComponent<PlayerHealth>();
-
-            //if(playerHealth != null)
-            //{
-                //playerHealth.TakeDamage(stats.damage);
-            //}
+            Debug.Log("Player Hitted!");
+            /*
+            PlayerHealth playerHealth = hit.GetComponent<PlayerHealth>();
+            playerHealth?.TakeDamage(stats.damage);
+            */
         }
 
         //VFX
         ParticleSystem particle = Instantiate(effects[0], transform.position, Quaternion.identity);
         particle.Play(); particle.transform.localScale *= 1.3f;
-        particle.transform.SetParent(GameObject.Find("bin").transform);
+        particle.transform.SetParent(bin);
 
         //SFX
         audioSource.PlayOneShot(audioExplosion);
@@ -217,9 +219,6 @@ public class EnemyLogic_Dron : EnemyLogic
         if(Application.isPlaying)
         {
             Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(transform.position, stats.attackRange); //display "bomb" radious
-
-            Gizmos.color = Color.cyan;
             Gizmos.DrawSphere(chargeTargetPosition, 0.25f); //display target position
         }
     }

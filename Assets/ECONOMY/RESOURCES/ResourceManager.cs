@@ -9,24 +9,17 @@ public class ResourceManager : MonoBehaviour
 {
     private int playerXP; //saves player run xp amount
     private int playerCoins; //saves player run coins amount.
+
     [Header("Text Display")]
     [SerializeField] private TextMeshProUGUI[] resourceFlowPrefab; //XP-Coin
+    private Transform flowXPSlot, flowCoinSlot;
 
 
-#region TEST
     void Awake()
     {
-        Debug.Log("add 1 coin test key: 'K'");
+        flowXPSlot = GameObject.Find("FlowXPSlot").transform;
+        flowCoinSlot = GameObject.Find("FlowCoinSlot").transform;
     }
-    void Update()
-    {
-       
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            AddCoins(1);
-        }
-    }
-#endregion TEST
 
     public void AddXP(int amount) //Called when player gain xp
     {
@@ -61,13 +54,13 @@ public class ResourceManager : MonoBehaviour
     public void XpFlowDisplayer(int income) //Displays xp gained by player in text
     {
         TextMeshProUGUI incomeDisplay1 = Instantiate(resourceFlowPrefab[0]);
-        incomeDisplay1.transform.SetParent(GameObject.Find("FlowXPSlot").transform, false);
+        incomeDisplay1.transform.SetParent(flowXPSlot, false);
         incomeDisplay1.text = "+" + income.ToString();
     }
     public void CoinFlowDisplayer(int income) //Displays coins gained by player in text
     {
         TextMeshProUGUI incomeDisplay1 = Instantiate(resourceFlowPrefab[1]);
-        incomeDisplay1.transform.SetParent(GameObject.Find("FlowCoinSlot").transform, false);
+        incomeDisplay1.transform.SetParent(flowCoinSlot, false);
         incomeDisplay1.text = "+" + income.ToString();
     }
 }

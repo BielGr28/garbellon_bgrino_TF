@@ -209,10 +209,10 @@ AnimatorStateMachine:
     m_Position: {x: 40, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7662676103594784149}
-    m_Position: {x: 560, y: 20, z: 0}
+    m_Position: {x: 560, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1759536333501470636}
-    m_Position: {x: 290, y: 20, z: 0}
+    m_Position: {x: 290, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6527573085269968745}
     m_Position: {x: 290, y: 120, z: 0}
@@ -239,7 +239,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tank_die
+  m_Name: _Die
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -265,7 +265,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tank_walk_v2
+  m_Name: _Walk
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -314,7 +314,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tank_Defend
+  m_Name: _Defend
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -366,7 +366,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tanc_Attack_v3
+  m_Name: _Attack
   m_Speed: 1.5
   m_CycleOffset: 0
   m_Transitions:

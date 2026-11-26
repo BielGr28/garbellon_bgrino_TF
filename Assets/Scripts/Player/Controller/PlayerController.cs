@@ -125,6 +125,8 @@ public class PlayerController : MonoBehaviour
         {
             move = transform.right * inputValue.x + transform.forward * inputValue.y;
         }
+
+        CurrentMoveDirection = move.normalized;
         
         if(!Sliding)
         {
@@ -132,6 +134,11 @@ public class PlayerController : MonoBehaviour
         }  
        
         Crouch(move.magnitude);
+    }
+    public Vector3 CurrentMoveDirection
+    {
+        get;
+        private set;
     }
 
     void Jump()

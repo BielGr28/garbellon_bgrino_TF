@@ -43,11 +43,11 @@ public class InteractionManager : MonoBehaviour
             {
                 promptText.text =  hitInfo.collider.GetComponent<Interactable>().promptMessage;
                 
-                if(storeManager.isStoreOpened == false && Input.GetKeyDown(KeyCode.F))
+                if(StoreManager.isStoreOpened == false && Input.GetKeyDown(KeyCode.F))
                 {
                     storeManager.OpenStore();
                 }
-                else if (storeManager.isStoreOpened == true && Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Escape))
+                else if (StoreManager.isStoreOpened == true && Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     storeManager.CloseStore();
                 }

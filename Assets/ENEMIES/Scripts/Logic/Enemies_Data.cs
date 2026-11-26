@@ -5,7 +5,7 @@ public enum EnemyType
 {
     Ranged,
     Tank,
-    Dron,
+    Kamikaze,
 }
 
 public class Enemy_Data : MonoBehaviour
@@ -17,10 +17,10 @@ public class Enemy_Data : MonoBehaviour
             new EnemyStatsData 
             { 
                 maxHealth = 200, 
-                damage = 10, 
-                speed = 5,
-                detectionRange = 12,
-                attackRange = 8,
+                damage = 15, 
+                speed = 6,
+                detectionRange = 15,
+                attackRange = 10,
                 XP = 6,
                 Coins = 2
             }
@@ -31,9 +31,9 @@ public class Enemy_Data : MonoBehaviour
             new EnemyStatsData 
             { 
                 maxHealth = 300, 
-                damage = 15, 
+                damage = 10, 
                 speed = 3, 
-                detectionRange = 12,
+                detectionRange = 15,
                 attackRange = 2.5f,
                 XP = 10,
                 Coins = 3
@@ -41,13 +41,13 @@ public class Enemy_Data : MonoBehaviour
         },
 
         {
-            EnemyType.Dron,
+            EnemyType.Kamikaze,
             new EnemyStatsData 
             { 
                 maxHealth = 100, 
                 damage = 20, 
                 speed = 15,
-                detectionRange = 12,
+                detectionRange = 15,
                 attackRange = 4,  
                 XP = 4,
                 Coins = 1              
