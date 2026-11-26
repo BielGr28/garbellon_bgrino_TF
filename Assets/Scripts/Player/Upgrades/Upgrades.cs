@@ -20,6 +20,7 @@ public  abstract class Upgrades : ScriptableObject
 {
 
     //Information shown on the upgrades cards UI
+
     //Upgrade's name
     public string upgradeName;
     //Upgrade-s icon 
@@ -30,11 +31,13 @@ public  abstract class Upgrades : ScriptableObject
     //What stats does the upgrade powers up.
     public UpgradeType upgradeType;
 
+    //How rare is this upgrade
     public UpgradeRarity upgradeRarity;
 
     //Level necesary to unlock the upgrade.
     public int unlockLevel;
 
+    //How much does this upgrade cost in the shop.
     public int shopCost;
 
     //(Canviare els noms pq siguin més clars, pero pq veguis com funciona)

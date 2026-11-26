@@ -53,7 +53,7 @@ public class AssaultRifle : Weapon
         Icon = _rifleIcon;
     }
 
-    public override void Especial()
+    public override void Special()
     {
         return;
     }    

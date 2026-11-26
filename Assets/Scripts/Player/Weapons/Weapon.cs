@@ -136,7 +136,7 @@ public abstract class Weapon : MonoBehaviour
         _weaponController.canShoot = true;
         _weaponController.canReload = true;
     }
-    public abstract void Especial();
+    public abstract void Special();
     public virtual void CroshairState(GameObject croshair)
     {
 

@@ -1183,6 +1183,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2156886732230981372, guid: a58e9846718120f488f90acf836594aa, type: 3}
   m_PrefabInstance: {fileID: 7842013808336313387}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1549750382 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2361476569394834892, guid: c98737733fc582d46bb50133527493f9, type: 3}
+  m_PrefabInstance: {fileID: 3042934304087032578}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1615730953
 GameObject:
   m_ObjectHideFlags: 0
@@ -2250,6 +2255,10 @@ PrefabInstance:
       propertyPath: shieldBar
       value: 
       objectReference: {fileID: 317564608}
+    - target: {fileID: 346123055344328002, guid: a58e9846718120f488f90acf836594aa, type: 3}
+      propertyPath: DeathPanel
+      value: 
+      objectReference: {fileID: 1549750382}
     - target: {fileID: 346123055344328002, guid: a58e9846718120f488f90acf836594aa, type: 3}
       propertyPath: healthText
       value: 

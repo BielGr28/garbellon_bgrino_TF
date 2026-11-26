@@ -73,7 +73,7 @@ public class WeaponController : MonoBehaviour
 
         if(_specialAction.WasPressedThisFrame())
         {
-           weapon.Especial();
+           weapon.Special();
         }
 
         if(_switchAction.WasPressedThisFrame() && WeaponsList[1].GetComponentInChildren<Weapon>() != null)
@@ -101,7 +101,7 @@ public class WeaponController : MonoBehaviour
         canReload = true;
     }
 
-    void UpdateUI()
+    public void UpdateUI()
     {
         currentIcon.sprite = weapon.Icon;
         if(WeaponsList[1].GetComponentInChildren<Weapon>() != null)

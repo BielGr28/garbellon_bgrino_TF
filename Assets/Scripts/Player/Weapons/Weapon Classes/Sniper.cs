@@ -106,7 +106,7 @@ public class Sniper : Weapon
             Reload();
         }    
     }
-    public override void Especial()
+    public override void Special()
     {
         
        _sniperCroshair.SetActive(!_sniperCroshair.activeSelf);

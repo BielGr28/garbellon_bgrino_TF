@@ -53,7 +53,7 @@ public class Shotgun : Weapon
         Icon = _shotgunIcon;
     }
 
-    public override void Especial(){}
+    public override void Special(){}
     public override void Shoot()
     {
         Debug.Log("bithc");

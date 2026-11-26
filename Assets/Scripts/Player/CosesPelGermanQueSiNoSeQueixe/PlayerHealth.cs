@@ -7,6 +7,11 @@ public class PlayerHealth : MonoBehaviour
 {   
     [SerializeField] private InputActionAsset _inputActions;
     private InputAction _debugAction;
+    private PlayerController _playerController;
+    private PlayerXP_Script _playerXP;
+    private WeaponController _weaponController;
+    private CameraController _cameraController;
+    [SerializeField] GameObject DeathPanel;
 
     [Header("PLAYER HEALTH ELEMENTS")]
     public float currentHealth;
@@ -22,14 +27,19 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake() 
     {
+        Time.timeScale = 1.0f;
         _debugAction = InputSystem.actions.FindAction("Debugger");
+        _playerController = GetComponent<PlayerController>();
+        _playerXP = GetComponent<PlayerXP_Script>();
+        _cameraController = GetComponent<CameraController>();
+        _weaponController = GetComponentInChildren<WeaponController>();
         UpdateUI();
     } 
     void Update()
     {
         if(_debugAction.WasPressedThisFrame())
         {
-            TakeDamage(15.0f);
+            TakeDamage(maxHealth);
         }
 
     }
@@ -121,8 +131,18 @@ public class PlayerHealth : MonoBehaviour
 
     public void Die()
     {
-        //Logica de die
-        //Desactivar controls, collider i pantalla en negre.
+        
+        DeathPanel.SetActive(true);
+        _cameraController.enabled = false;
+        _playerController.enabled = false;
+        _playerXP.enabled = false;
+        _weaponController.enabled = false;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        
+        Time.timeScale = 0.0f;
+
     }
 
 

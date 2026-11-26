@@ -8,11 +8,10 @@ using UnityEngine.InputSystem;
 /*public enum PlayerState
 {
     IDLE,
-    WALKING,
-    SPRINTING,
-    JUMPING,
+    MOVING,
     CROUCHING,
-    SLIDING
+    SLIDING,
+    DIE
 }*/
 
 //Controls the player movement.
@@ -206,7 +205,7 @@ public class PlayerController : MonoBehaviour
             if(currentSpeed > 0.0f)
             {
                 Debug.Log("Start Slide");
-                _slideDirection = movementVector; //_slideDirection = tranform.forward;
+                _slideDirection = movementVector;
                 _slideVelocity = _speed * 1.5f;
                 _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.SlideFOV;
                 Sliding = true;

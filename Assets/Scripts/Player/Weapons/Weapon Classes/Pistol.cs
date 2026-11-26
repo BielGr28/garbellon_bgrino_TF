@@ -60,7 +60,7 @@ public class Pistol : Weapon
     }
 
     //Not used in this weapon
-    public override void Especial()
+    public override void Special()
     {
         return;
     }
