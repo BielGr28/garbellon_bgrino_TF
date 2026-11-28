@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
             {
                 Crouching = false; 
                 Sliding = false;
-                _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
+                //_cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
                 _controller.height = 2.0f; 
                 _cameraController.AdjustCameraRoot();
                
@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Start Slide");
                 _slideDirection = movementVector;
                 _slideVelocity = _speed * 1.5f;
-                _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.SlideFOV;
+                //_cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.SlideFOV;
                 Sliding = true;
             }
 
@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
         {
             Crouching = false;
             Sliding = false;
-            _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
+            //_cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
             _controller.height = 2.0f;
             _cameraController.AdjustCameraRoot();
             
@@ -231,14 +231,14 @@ public class PlayerController : MonoBehaviour
            // _cameraController.cinemachineCamera.Lens.FieldOfView = Mathf
             _slideVelocity -= _speed *1.5f * Time.deltaTime;
             _controller.Move(_slideDirection * _slideVelocity * Time.deltaTime);
-            _cameraController.cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(_cameraController.cinemachineCamera.Lens.FieldOfView,_cameraController.BaseFOV,2f * Time.deltaTime);
+            //_cameraController.cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(_cameraController.cinemachineCamera.Lens.FieldOfView,_cameraController.BaseFOV,2f * Time.deltaTime);
 
            // Debug.Log(_speed);
 
             if(_slideVelocity <= _speed * 0.7f)
             {   
                 Sliding = false;
-                _cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
+                //_cameraController.cinemachineCamera.Lens.FieldOfView = _cameraController.BaseFOV;
                 Debug.Log("STOP SLIDING");
             }
         }       

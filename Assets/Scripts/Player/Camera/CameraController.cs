@@ -18,10 +18,12 @@ public class CameraController : MonoBehaviour
     public float BottomClamp;
     public float CrounchingOffset;
     public float BaseFOV;
+    public float AimFOV;
     public float SlideFOV;
     
     
     private PlayerController _playerController;
+    private WeaponController _weaponController;
     private float _cameraRotation;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -29,6 +31,7 @@ public class CameraController : MonoBehaviour
     {   
         cinemachineCamera = GameObject.FindGameObjectWithTag("CinemachineCamera").GetComponent<CinemachineCamera>();
         _playerController = GetComponent<PlayerController>();
+        _weaponController = GetComponentInChildren<WeaponController>();
         _lookAction = InputSystem.actions.FindAction("Look");
         _escAction = InputSystem.actions.FindAction("Esc");
         Cursor.lockState = CursorLockMode.Confined;
@@ -41,6 +44,7 @@ public class CameraController : MonoBehaviour
     {
         //Debug.Log(cinemachineCamera.Lens.FieldOfView);
         CameraRotation();
+        ChangeFOV();
 
         if(_escAction.WasPressedThisFrame())
         {
@@ -124,6 +128,27 @@ public class CameraController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = false;
+        }
+    }
+
+    public void ChangeFOV()
+    {
+        if(_weaponController.isAimming)
+        {
+            cinemachineCamera.Lens.FieldOfView = AimFOV;
+        }
+        else if(!_weaponController.isAimming && _playerController.Sliding)
+        {
+            if(cinemachineCamera.Lens.FieldOfView == BaseFOV)
+            {
+                cinemachineCamera.Lens.FieldOfView = SlideFOV;
+            }
+
+            cinemachineCamera.Lens.FieldOfView = Mathf.Lerp(cinemachineCamera.Lens.FieldOfView,BaseFOV,2f * Time.deltaTime);
+        }
+        else
+        {
+            cinemachineCamera.Lens.FieldOfView = BaseFOV;
         }
     }
 

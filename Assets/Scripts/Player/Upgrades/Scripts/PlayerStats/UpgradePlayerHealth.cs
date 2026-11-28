@@ -13,7 +13,10 @@ public class UpgradePlayerHealth : Upgrades
 
     public override void UpgradePlayer(PlayerController playerController)
     {
+
+        float currentHealthPercentage = playerController._playerHealth.currentHealth / playerController._playerHealth.maxHealth;
         playerController._playerHealth.maxHealth *= HealthIncrease;
+        playerController._playerHealth.currentHealth = playerController._playerHealth.maxHealth * currentHealthPercentage;
         playerController._playerHealth.UpdateUI();
         Debug.Log(playerController._playerHealth.maxHealth);
     }

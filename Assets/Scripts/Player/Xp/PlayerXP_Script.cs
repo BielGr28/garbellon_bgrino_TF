@@ -1,11 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerXP_Script : MonoBehaviour
 {
-
+    [SerializeField] private InputActionAsset inputActions;
+    private InputAction debugAction;
     [Header("PLAYER XP")]
     public float XPMultiplier;
     public float currentXP;
@@ -30,15 +32,19 @@ public class PlayerXP_Script : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        debugAction = InputSystem.actions.FindAction("Debugger");
         //XPCurve();
-        GainXP(100.0f);
+        //GainXP(100.0f);
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(debugAction.WasPressedThisFrame())
+        {
+            GainXP(100.0f);
+        }
         //Debug.Log($"CURRENT XP: {CurrentXP} // XP TO LvL UP: {XPToLvlUp}");
        
     }
@@ -59,6 +65,7 @@ public class PlayerXP_Script : MonoBehaviour
         UpdateXPValues();
         IncreaseHealthStats();
 
+        //_upgradesManager.ShowUpgradesUI();
         _upgradesManager.ShowUpgradesUI();
 
         Cursor.lockState = CursorLockMode.None;

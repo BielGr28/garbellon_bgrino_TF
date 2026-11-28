@@ -11,6 +11,9 @@ TagManager:
   - Medkit
   - Shield
   - CinemachineCamera
+  - StoreZone
+  - UpgradesContainer
+  - SniperZoom
   layers:
   - Default
   - TransparentFX

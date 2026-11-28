@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2381641163294384167}
   m_Layer: 0
   m_Name: UpgradesContainer
-  m_TagString: Untagged
+  m_TagString: UpgradesContainer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44,8 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60f6217abc54e814899ad54e441e1af5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradesLIst
-  Upgrades:
-  - {fileID: 11400000, guid: 296f5003292fe734b8952051b2888107, type: 2}
-  - {fileID: 11400000, guid: ab885b4d8dd739d458c877d4dcd93ce8, type: 2}
+  LevelUpUpgrades:
+  - {fileID: 11400000, guid: e1de97463b4faf344b04409cfcfea19b, type: 2}
+  - {fileID: 11400000, guid: 8284f262c5b84e94d814916aefcdcd3a, type: 2}
+  - {fileID: 11400000, guid: bfe137ed3158f614984b4536f26d6263, type: 2}
   - {fileID: 11400000, guid: d35896daaa495d24c97d84c43e81c838, type: 2}
   - {fileID: 11400000, guid: 039309de8ca640543903586041001443, type: 2}
+  ShopUpgrades:
+  - {fileID: 11400000, guid: 20b4377cc376162479055b76f999e4b9, type: 2}
+  - {fileID: 11400000, guid: 296f5003292fe734b8952051b2888107, type: 2}
+  - {fileID: 11400000, guid: 689b916cae53e46468c1a068c7c46874, type: 2}
+  - {fileID: 11400000, guid: ab885b4d8dd739d458c877d4dcd93ce8, type: 2}
+  - {fileID: 11400000, guid: 8284f262c5b84e94d814916aefcdcd3a, type: 2}

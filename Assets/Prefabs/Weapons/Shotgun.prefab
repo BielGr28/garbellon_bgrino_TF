@@ -385,8 +385,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c24995f091ae42847a34655542517dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shotgun
-  BulletSpread: 0.2
-  BulletsPerShot: 6
+  BulletSpread: 0.02
+  BulletsPerShot: 8
   PSPoint: {fileID: 2679623993428498385}
   _shotgunIcon: {fileID: 21300000, guid: f7766d9d0a6b5b34099d74aaff0765e5, type: 3}
   _shotgunAnimator: {fileID: 0}

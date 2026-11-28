@@ -49,14 +49,14 @@ public class Shotgun : Weapon
 
     void Awake()
     {
-        SetDefaultStats(4.0f,10,1.5f,0.8f,10f,7.0f);
+        SetDefaultStats(4.0f,10,1.5f,0.2f,10f,7.0f);
         Icon = _shotgunIcon;
     }
 
     public override void Special(){}
     public override void Shoot()
     {
-        Debug.Log("bithc");
+        //Debug.Log("bithc");
         if(CurrentAmmo > 0)
         {
             RaycastHit hit;

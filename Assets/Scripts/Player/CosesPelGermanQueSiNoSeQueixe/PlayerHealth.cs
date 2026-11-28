@@ -37,10 +37,10 @@ public class PlayerHealth : MonoBehaviour
     } 
     void Update()
     {
-        if(_debugAction.WasPressedThisFrame())
+       /* if(_debugAction.WasPressedThisFrame())
         {
             TakeDamage(maxHealth);
-        }
+        }*/
 
     }
     public void TakeDamage(float damage)
@@ -162,6 +162,10 @@ public class PlayerHealth : MonoBehaviour
                 float shield = other.gameObject.GetComponent<Shield>().CalcultateShieldPoints(maxHealth);
                 GainShield(shield);
                 GameObject.Destroy(other.gameObject);
+            break;
+
+            case "StoreZone":
+                other.transform.GetComponentInChildren<ActivateShop>().SetShopItems();
             break;
         }
     }

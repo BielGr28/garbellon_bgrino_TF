@@ -21,9 +21,6 @@ public class Pistol : Weapon
     public override float MaxDamageRange { set; get; }
     public override GameObject Croshair => GameObject.FindGameObjectWithTag("CrossHair");
 
-
-    
-
     public override WeaponController _weaponController => GetComponentInParent<WeaponController>();
 
     public override Sprite Icon {set;get;}
@@ -32,6 +29,7 @@ public class Pistol : Weapon
 
     public Transform PSPoint;
 
+ 
     [Header("VFX ELEMENTS")]
     [SerializeField] private Sprite _pistolIcon;
     [SerializeField] private Animator _pistolAnimator;
@@ -55,7 +53,7 @@ public class Pistol : Weapon
 
     void Awake()
     {
-        SetDefaultStats(4.0f,20,1.1f,0.5f,.02f,20.0f);
+        SetDefaultStats(4.0f,16,1.1f,0.5f,2f,20.0f);
         Icon = _pistolIcon;
     }
 
@@ -77,15 +75,12 @@ public class Pistol : Weapon
             _animator.SetTrigger(AN_SHOOT);
             CroshairState(Croshair);
 
-            Debug.Log(Precision);
-            //Precision /= 100f;
-            float xOffsett =  Random.Range(-Precision, Precision);
-            float yOffsett =  Random.Range(-Precision, Precision);
+            //Debug.Log(Precision);
+                  
 
-            if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f + xOffsett,0.5f + yOffsett,0.0f)),out hit, Range))
+            if(Physics.Raycast(Camera.main.ViewportPointToRay(new Vector3(0.5f ,0.5f ,0.0f)),out hit, Range))
             {
        
-
                 SetLineRenderer(_shootingPS.GetComponent<LineRenderer>(),PSPoint,hit.point);
                 GameObject bulletTrail;
                 bulletTrail = GameObject.Instantiate(_shootingPS,PSPoint.position,Quaternion.identity);

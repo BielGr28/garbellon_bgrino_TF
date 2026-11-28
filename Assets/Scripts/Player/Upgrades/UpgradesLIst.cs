@@ -3,5 +3,7 @@ using UnityEngine;
 
 public class UpgradesList : MonoBehaviour
 {
-    public List<Upgrades> Upgrades;
+    public List<Upgrades> LevelUpUpgrades;
+
+    public List<Upgrades> ShopUpgrades;
 }

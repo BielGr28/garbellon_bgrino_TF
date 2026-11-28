@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UpgradesManager : MonoBehaviour
-{
+{   
+    [Header("XP UPGRADES COMPONENTS")]
+    //[SerializeField] private LevelXPManager _playerXp;
+    //[SerializeField] private ItemCardManager[] cards;
     [SerializeField] PlayerXP_Script _playerXp;
     public WeaponController weaponController;
     public PlayerController playerController;
@@ -13,11 +16,15 @@ public class UpgradesManager : MonoBehaviour
     public List<XPSO_Holder> UpgradesHolders;
     [SerializeField] GameObject UpgradesUI;
 
+ 
+
     void Awake()
     {
+        upgradesList = GameObject.FindGameObjectWithTag("UpgradesContainer").GetComponentInChildren<UpgradesList>();
         //playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         //weaponController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<WeaponController>();
     }
+    /*
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -28,11 +35,12 @@ public class UpgradesManager : MonoBehaviour
     void Update()
     {
         
-    }
+    }*/
 
-    public void ChooseAbility(XPSO_Holder choosenCard)
+    public void ChooseAbility(XPSO_Holder choosenCard /*ItemCardManager choosenCard*/)
     {
         Upgrades choosenUpgrade = choosenCard.upgrade;
+        //Upgrades choosenUpgrade = choosenCard.currentUpgrade;
 
         switch(choosenUpgrade.upgradeType)
         {
@@ -62,8 +70,11 @@ public class UpgradesManager : MonoBehaviour
     public void ShowUpgradesUI()
     {
         SetRandomUpgrade();
+        //PlayerUpgrades.Clear();
         UpgradesUI.SetActive(true);
     }
+
+
 
 
     //Choose between all upgrades available without repeating;
@@ -73,16 +84,17 @@ public class UpgradesManager : MonoBehaviour
         List<Upgrades> availableUpgrades = new List<Upgrades>();
 
         //Fill the list with all the Upgrades with the same or lower level than the player.
-        for(int i = 0;  i < PlayerUpgrades.Count; i++)
+        for(int i = 0;  i < upgradesList.LevelUpUpgrades.Count; i++)
         {
-            Debug.Log($"Current Level: {_playerXp.currentLevel} || Upgrade Level: {PlayerUpgrades[i].unlockLevel}");
-            if(upgradesList.Upgrades[i].unlockLevel <= _playerXp.currentLevel)
+            //Debug.Log($"Current Level: {_playerXp.currentLevel} || Upgrade Level: {upgradesList.LevelUpUpgrades[i].unlockLevel}");
+            //Check upgrade level and if its already on players list.
+            if(upgradesList.LevelUpUpgrades[i].unlockLevel <= _playerXp.currentLevel && !PlayerUpgrades.Contains(upgradesList.LevelUpUpgrades[i]))
             {
-                availableUpgrades.Add(PlayerUpgrades[i]);
+                availableUpgrades.Add(upgradesList.LevelUpUpgrades[i]);
             }
         }
         
-        Debug.Log($"Holders Count: {UpgradesHolders.Count}  || availableUpgrades Count: {availableUpgrades.Count}");
+        //Debug.Log($"Holders Count: {UpgradesHolders.Count}  || availableUpgrades Count: {availableUpgrades.Count}");
         //Fill the UI elements with a random Upgrade.
         for (var i = 0; i < UpgradesHolders.Count; i++)
         {
@@ -91,7 +103,7 @@ public class UpgradesManager : MonoBehaviour
             XPSO_Holder currentUpgrade =  UpgradesHolders[i];
             Upgrades upgradeItem = availableUpgrades[randomUpgrade];
 
-
+            //cards[i].InitializeCard(upgradeItem)
             currentUpgrade.upgrade = upgradeItem;
             currentUpgrade.upgradeTitle.text = upgradeItem.upgradeName;
             currentUpgrade.upgradeDescription.text = upgradeItem.upgradeDescription;
@@ -99,9 +111,10 @@ public class UpgradesManager : MonoBehaviour
 
             //Remove the chosen upgrade from the editable list to avoid repeating them.
             availableUpgrades.RemoveAt(randomUpgrade);
-            Debug.Log("Upgrades Count: " + i);
+            //Debug.Log("Upgrades Count: " + i);
         }
     }    
 
-
+    
+    
 }

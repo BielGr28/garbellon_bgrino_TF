@@ -3,7 +3,8 @@ public enum UpgradeType
 {
     Player,
     CurrentWepon,
-    Weapons
+    Weapons,
+    WeaponInShop
 }
 
 public enum UpgradeRarity

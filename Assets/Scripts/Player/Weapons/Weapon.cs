@@ -1,7 +1,4 @@
 using System.Collections;
-using Unity.Android.Gradle;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 
 using UnityEngine.UI;
@@ -50,7 +47,7 @@ public abstract class Weapon : MonoBehaviour
     public virtual float CalculateDamage(float hitDistance, WeaponGeneralUpgrades generalUpgrades )
     {
         //Damage Applying Efects
-        float damageWithEffects = generalUpgrades.ApplyEspcialEffects(this,hitDistance);
+        float damageWithEffects = generalUpgrades.ApplyEspecialEffects(this,hitDistance);
        
         ESPECIALEFFECTS ignoreDistance = ESPECIALEFFECTS.FURTHERMAXDISTANCE;
         
@@ -94,12 +91,11 @@ public abstract class Weapon : MonoBehaviour
                 }
             }
         }
-
-       
     }
 
     void Update()
     {
+        //Reset croshair to base state.
         RectTransform rect = Croshair.GetComponent<RectTransform>();
         
         Vector3 currentScale = rect.localScale;
@@ -107,6 +103,19 @@ public abstract class Weapon : MonoBehaviour
         currentScale.y = Mathf.Lerp(currentScale.y,1.0f,Precision * Time.fixedDeltaTime);
 
         rect.localScale = currentScale;
+    }    
+    public virtual void CroshairState(GameObject croshair)
+    {
+        RectTransform rect = croshair.GetComponent<RectTransform>();
+        Vector3 currecntScale = rect.localScale;
+
+        if(currecntScale.x < 4.0f)
+        {
+            currecntScale.x += Precision;
+            currecntScale.y += Precision;
+        }
+
+        rect.localScale = currecntScale;
     }
     public abstract void Shoot();
     //public abstract void Reload();
@@ -137,17 +146,7 @@ public abstract class Weapon : MonoBehaviour
         _weaponController.canReload = true;
     }
     public abstract void Special();
-    public virtual void CroshairState(GameObject croshair)
-    {
 
-        RectTransform rect = croshair.GetComponent<RectTransform>();
-        Vector3 currecntScale = rect.localScale;
-    
-        currecntScale.x += Precision;
-        currecntScale.y += Precision;
-
-        rect.localScale = currecntScale;
-    }
 
     public virtual void UpdateWeaponUI(int ammoUI)
     {

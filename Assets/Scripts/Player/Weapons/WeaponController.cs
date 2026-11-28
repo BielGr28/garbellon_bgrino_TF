@@ -12,8 +12,9 @@ public class WeaponController : MonoBehaviour
     private InputAction _specialAction;
     private InputAction _reloadAction;
     private InputAction _switchAction;
+    private InputAction _debugAction;
 
-    public bool isShooting;
+    public bool isAimming;
     public bool canShoot;
     public bool canReload;
 
@@ -39,6 +40,7 @@ public class WeaponController : MonoBehaviour
         _specialAction = InputSystem.actions.FindAction("Special");
         _reloadAction = InputSystem.actions.FindAction("Reload"); 
         _switchAction = InputSystem.actions.FindAction("Switch");
+        _debugAction = InputSystem.actions.FindAction("Debugger");
         generalUpgrades = GetComponent<WeaponGeneralUpgrades>();
 
         CurrentWeapon = WeaponsList[0];
@@ -51,11 +53,14 @@ public class WeaponController : MonoBehaviour
         weapon = CurrentWeapon.GetComponentInChildren<Weapon>();
         gunCroshair = weapon.Croshair;
 
+        //Debug.Log($"Current Waepon: {weapon} // Second Weapon: {SecondWeapon.GetComponentInChildren<Weapon>()}");
+
         UpdateAllWeaponsStats();
 
         UpdateUI();
 
         SecondWeapon.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -76,13 +81,18 @@ public class WeaponController : MonoBehaviour
            weapon.Special();
         }
 
-        if(_switchAction.WasPressedThisFrame() && WeaponsList[1].GetComponentInChildren<Weapon>() != null)
+        if(_switchAction.WasPressedThisFrame() && WeaponsList[1].GetComponentInChildren<Weapon>(true) != null)
         {
             ChangeWeapons(CurrentWeapon,SecondWeapon);
         }
+
+        if(_debugAction.WasPressedThisFrame())
+        {
+            Debug.Log($" Weapon {weapon.WeaponName}\n Damage: {weapon.Damage}\n Fire Rate: {weapon.FireRate}\n Ammo: {weapon.TotalAmmo}");
+        }
     }
 
-    void ChangeWeapons(GameObject current, GameObject newWeapon)
+    public void ChangeWeapons(GameObject current, GameObject newWeapon)
     {
         current.SetActive(false);
         newWeapon.SetActive(true);
@@ -104,8 +114,9 @@ public class WeaponController : MonoBehaviour
     public void UpdateUI()
     {
         currentIcon.sprite = weapon.Icon;
-        if(WeaponsList[1].GetComponentInChildren<Weapon>() != null)
+        if(WeaponsList[1].GetComponentInChildren<Weapon>(true) != null)
         { 
+            Debug.Log("has second weapon");
             secondIcon.GetComponentInParent<RawImage>().enabled = true;
             secondIcon.enabled = true;
             secondIcon.sprite = WeaponsList[1].GetComponentInChildren<Weapon>().Icon;
@@ -124,7 +135,7 @@ public class WeaponController : MonoBehaviour
         {
             if(WeaponsList[i].GetComponentInChildren<Weapon>() != null)
             {
-                Debug.Log("Enter Upgrade");
+                //Debug.Log("Enter Upgrade");
                 Weapon currentWeapon = WeaponsList[i].GetComponentInChildren<Weapon>();
                 generalUpgrades.AppplyMultipliers(currentWeapon);
             }

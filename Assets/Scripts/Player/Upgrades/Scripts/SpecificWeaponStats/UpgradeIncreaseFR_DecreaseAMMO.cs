@@ -24,6 +24,8 @@ public class UpgradesIncrease_FR_DecreaseAMMO : Upgrades
         upgradeWeapon.TotalAmmo = Mathf.RoundToInt(totalAmmoValue);
         upgradeWeapon.CurrentAmmo = Mathf.RoundToInt(finalCurrentAmmo);
         upgradeWeapon.UpdateWeaponUI(upgradeWeapon.CurrentAmmo);
+
+        Debug.Log(upgradeWeapon.FireRate);
     }
 
     public override void UpgradePlayer(PlayerController playerController)

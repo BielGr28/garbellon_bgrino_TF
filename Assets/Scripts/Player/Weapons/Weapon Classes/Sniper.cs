@@ -55,9 +55,11 @@ public class Sniper : Weapon
 
     void Awake()
     {
+        _camera = GameObject.FindGameObjectWithTag("CinemachineCamera").GetComponent<CinemachineCamera>();
+        _sniperCroshair = GameObject.FindGameObjectWithTag("SniperZoom").transform.gameObject;
         SetDefaultStats(20.0f,5,1.5f,1.0f,10f, Range);
         Icon = _sniperIcon;
-        Debug.Log("ICOOON")
+        //Debug.Log("ICOOON")
 ;    }
 
     public override void Shoot()
@@ -109,20 +111,15 @@ public class Sniper : Weapon
     public override void Special()
     {
         
-       _sniperCroshair.SetActive(!_sniperCroshair.activeSelf);
+       _sniperCroshair.GetComponentInChildren<Image>().enabled = !_sniperCroshair.GetComponentInChildren<Image>().enabled;
+       //Croshair.SetActive(!Croshair.activeSelf);
        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
        foreach (var render in renderers)
        {
          render.enabled = !render.enabled;
        }
-       if(_camera.Lens.FieldOfView > zoomValue)
-       {
-           _camera.Lens.FieldOfView = zoomValue;
-       }
-       else
-        {
-            _camera.Lens.FieldOfView = normalFOV;
-        }
+
+        _weaponController.isAimming = !_weaponController.isAimming;
        
     }
 

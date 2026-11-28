@@ -9,9 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62e818bc4668aaa41b821c916c02745b, type: 3}
+  m_Script: {fileID: 11500000, guid: 62e61219be00d014b954e77771b63d96, type: 3}
   m_Name: BuySniper
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponInShop
-  weponToGet: {fileID: 8882961568503273056, guid: e3f734582287b774489075a7bb59b236, type: 3}
-  weaponSprite: {fileID: 21300000, guid: 264e75c7bdfd8a1439539ffc49c46e78, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::BuyWeapon
+  upgradeName: Buy Sniper
+  upgradeIcon: {fileID: 21300000, guid: 264e75c7bdfd8a1439539ffc49c46e78, type: 3}
+  upgradeDescription: Ondia un Sniper
+  upgradeType: 3
+  upgradeRarity: 3
+  unlockLevel: 0
   shopCost: 20
+  weaponToGet: {fileID: 8882961568503273056, guid: e3f734582287b774489075a7bb59b236, type: 3}

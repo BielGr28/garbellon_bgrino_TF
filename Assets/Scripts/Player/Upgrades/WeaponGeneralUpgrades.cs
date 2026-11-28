@@ -8,6 +8,9 @@ public enum ESPECIALEFFECTS
     CLOSER5METERS,
     FURTHERMAXDISTANCE,
     CRITCHANCE,
+    LOWHEALTH,
+    MAXHEALTH,
+    WITHSHIELD,
     INCREASE_SHOTGUN,
     INCREASE_SNIPER,
     INCREASE_RIFLE,
@@ -16,6 +19,7 @@ public enum ESPECIALEFFECTS
 //Manages the players upgrades that effect all weapons.
 public class WeaponGeneralUpgrades : MonoBehaviour
 {
+    private PlayerHealth playerHealth;
     public List<ESPECIALEFFECTS> playerEspecials;
     public float damageMultiplier;
     public float totalAmmoMultiplier;
@@ -25,8 +29,13 @@ public class WeaponGeneralUpgrades : MonoBehaviour
 
     public float outputDamage;
 
+    void Awake()
+    {
+        playerHealth = GetComponentInParent<PlayerHealth>();
+    }
+
     //Calculate weapon damage based on the player current upgrades.
-    public float ApplyEspcialEffects(Weapon weapon,float hitDistance)
+    public float ApplyEspecialEffects(Weapon weapon,float hitDistance)
     {
         if(playerEspecials != null)
         {
@@ -59,6 +68,22 @@ public class WeaponGeneralUpgrades : MonoBehaviour
                         outputDamage = Damage_CriticalChance(outputDamage);
                         Debug.Log("Crit Chance");
                     break;
+
+                    case ESPECIALEFFECTS.MAXHEALTH:
+                        outputDamage = Damage_OnMaxHealth(outputDamage,playerHealth.currentHealth,playerHealth.maxHealth);
+                        Debug.Log("Max Health");
+                    break;
+
+                    case ESPECIALEFFECTS.LOWHEALTH:
+                        outputDamage = Damage_OnLowHealth(outputDamage,playerHealth.currentHealth,playerHealth.maxHealth);
+                        Debug.Log("Low Health");
+                    break;
+
+                    case ESPECIALEFFECTS.WITHSHIELD:
+                        outputDamage = Damage_WithShield(outputDamage,playerHealth.currentShield);
+                        Debug.Log("With Shield");
+                    break;
+
 
                     case ESPECIALEFFECTS.INCREASE_PISTOL:
                         outputDamage = Damage_Pistols(outputDamage,weapon.WeaponType);
@@ -117,6 +142,8 @@ public class WeaponGeneralUpgrades : MonoBehaviour
 
 
 #region ESPECIAL EFFECTS
+
+    #region DAMAGE EFFECTS
     public float Damage_Higher50Ammo(float baseDamage, int currentAmmo, int totalAmmo)
     {
         if(currentAmmo > totalAmmo/2)
@@ -134,7 +161,7 @@ public class WeaponGeneralUpgrades : MonoBehaviour
     {
         if(currentAmmo <= totalAmmo/2)
         {
-            float value = baseDamage * 2.0f;
+            float value = baseDamage * 1.5f;
             return value;
         }
         else
@@ -160,7 +187,7 @@ public class WeaponGeneralUpgrades : MonoBehaviour
         if(hitDistance >= maxRange)
         {
             float value;
-            value = baseDamage * 2f;
+            value = baseDamage * 1.5f;
             return value;
         }
         else
@@ -185,6 +212,49 @@ public class WeaponGeneralUpgrades : MonoBehaviour
         }
         
     }
+
+    public float Damage_OnLowHealth(float baseDamage, float currentHealth, float maxHealth)
+    {
+
+        float limit = maxHealth * 0.2f;
+        if(currentHealth >= limit)
+        {
+            float outdamage = baseDamage * 2.0f;
+            return outdamage;
+        }
+        else
+        {
+            return baseDamage;
+        }
+    }
+
+    public float Damage_OnMaxHealth(float baseDamage, float currentHealth ,float maxHealth)
+    {
+        if(currentHealth == maxHealth)
+        {
+            float outdamage = baseDamage * 1.75f;
+            return outdamage;
+        }
+        else
+        {
+            return baseDamage;
+        }
+    }
+
+    public float Damage_WithShield(float baseDamage, float shield)
+    {
+        if(shield > 0.0f)
+        {
+            float outdamage = baseDamage * 1.25f;
+            return outdamage;
+        }
+        else
+        {
+            return baseDamage;
+        }
+    }
+
+
 
     public float Damage_Shotguns(float baseDamage, WeaponType weaponType)
     {
@@ -238,6 +308,9 @@ public class WeaponGeneralUpgrades : MonoBehaviour
             return baseDamage;
         }
     }
+    #endregion
+
+
 #endregion
 
 }
